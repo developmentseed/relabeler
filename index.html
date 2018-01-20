@@ -7,19 +7,23 @@
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.42.2/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.42.2/mapbox-gl.css' rel='stylesheet' />
     <style>
-        body { margin:0; padding:0; }
-        #map { position:absolute; top:0; bottom:0; width:100%; }
+        body { margin:0; padding:0; font-family: monospace;}
+        #map { position:absolute; top:0; bottom:0; width:100%; z-index: 1 !important;}
+        #control { position: absolute; z-index: 2; padding: 0 10px 10px; border: 1px solid #eee; margin: 10px; background-color: white; }
+        .label span { display: inline-block; height: 10px; width: 10px; margin-right: 5px; }
     </style>
     <script src="https://unpkg.com/chroma-js"></script>
     <script src="https://npmcdn.com/@turf/turf/turf.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js">
-
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
+    <script src="download.js"></script>
 </head>
 <body>
-  <button onClick=save type="button" name="button">Save</button>
-  <div id="legend">
-    <ul id="legend-list"></ul>
+  <div id="control">
+    <h4>Classes</h4>
+    <ul id="legend"></ul>
+    <h4>Label Opacity</h4>
+    <input id="slider" type="range" min=0 max=100 /><br /><br />
+    <button onClick=save() type="button" name="button">Save</button>
   </div>
   <div id='map'></div>
 <script>
@@ -28,19 +32,34 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiZGV2c2VlZCIsImEiOiJnUi1mbkVvIn0.018aLhX0Mb0td
 fetch('http://localhost:8000/labels.geojson')
   .then(resp => resp.json())
   .then(data => {
-    var bbox = turf.bbox(data)
-    var classes = data.features[0].properties.label
-    var colors = chroma.scale('Set1').colors(classes.length)
+    // store the original copy
+    const original = _.cloneDeep(data)
 
+    // give every tile an id/index
     data.features.forEach((feature, i) => {
       feature.id = i
     })
 
-    var legend = document.getElementById('legend-list')
+    window.save = () => {
+      var file = new File([JSON.stringify(data)], "labels-modified.json", {
+        type: "text/json",
+      });
+      console.log(file);
+      var url = URL.createObjectURL(file)
+      multiDownload([url])
+    }
+
+    // now define our classes/colors and use them to create a legend and map colors
+    var classes = data.features[0].properties.label
+    var colors = chroma.scale('Set2').colors(classes.length)
+
+    var legend = document.getElementById('legend')
     classes.forEach((cl, i) => {
-
+      var li = document.createElement('li')
+      li.innerHTML = `<span class="label" style="background-color:${colors[i]}"></span>
+      ${i === 0 ? 'Background' : `Class ${i}`}`
+      legend.appendChild(li)
     })
-
 
     var filters = _.flatten(classes.map((cl, i) => {
       return [
@@ -49,8 +68,8 @@ fetch('http://localhost:8000/labels.geojson')
       ]
     }))
     var fillColors = ['case'].concat(filters).concat(['black'])
-    console.log(fillColors);
 
+    // initialize the map
     var map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/mapbox/satellite-streets-v9',
@@ -58,7 +77,10 @@ fetch('http://localhost:8000/labels.geojson')
         zoom: 4
     })
     map.on('load', () => {
+      var bbox = turf.bbox(data)
+      // zoom to the data
       map.fitBounds([[bbox[0], bbox[1]], [bbox[2], bbox[3]]])
+      // load the data
       map.addSource('labels', {
         type: 'geojson',
         data
@@ -74,19 +96,25 @@ fetch('http://localhost:8000/labels.geojson')
         }
       })
 
+      // events
+
+      // on click, update the data for that tile and re-render
       map.on('click', 'labels', (e) => {
         const feature = e.features[0]
         const label = JSON.parse(feature.properties.label)
+        // shift the label by one
         const newLabel = [label.pop()].concat(label)
         data.features[feature.id].properties.label = newLabel
         map.getSource('labels').setData(data)
       })
+
+      // on slider change, update the layer opacity
+      slider = document.getElementById('slider')
+      slider.addEventListener('change', (e) => {
+        map.setPaintProperty('labels', 'fill-opacity', e.target.valueAsNumber / 100)
+      })
     })
   })
-
-function save () {
-
-}
 
 </script>
 
