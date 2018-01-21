@@ -24,6 +24,7 @@
     <h4>Label Opacity</h4>
     <input id="slider" type="range" min=0 max=100 /><br /><br />
     <button onClick=save() type="button" name="button">Save</button>
+    <button onClick=reset() type="button" name="button">Reset</button>
   </div>
   <div id='map'></div>
 <script>
@@ -40,19 +41,11 @@ fetch('http://localhost:8000/labels.geojson')
       feature.id = i
     })
 
-    window.save = () => {
-      var file = new File([JSON.stringify(data)], "labels-modified.json", {
-        type: "text/json",
-      });
-      console.log(file);
-      var url = URL.createObjectURL(file)
-      multiDownload([url])
-    }
-
-    // now define our classes/colors and use them to create a legend and map colors
+    // now define our classes/colors and use them to...
     var classes = data.features[0].properties.label
     var colors = chroma.scale('Set2').colors(classes.length)
 
+    // ...create a legend
     var legend = document.getElementById('legend')
     classes.forEach((cl, i) => {
       var li = document.createElement('li')
@@ -61,6 +54,7 @@ fetch('http://localhost:8000/labels.geojson')
       legend.appendChild(li)
     })
 
+    // ...and map colors
     var filters = _.flatten(classes.map((cl, i) => {
       return [
         ['==', ['number', ['at', i, ['array', ['get', 'label']]]], 1],
@@ -80,11 +74,14 @@ fetch('http://localhost:8000/labels.geojson')
       var bbox = turf.bbox(data)
       // zoom to the data
       map.fitBounds([[bbox[0], bbox[1]], [bbox[2], bbox[3]]])
+
       // load the data
       map.addSource('labels', {
         type: 'geojson',
         data
       })
+
+      // show the data
       map.addLayer({
         'id': 'labels',
         'source': 'labels',
@@ -109,10 +106,24 @@ fetch('http://localhost:8000/labels.geojson')
       })
 
       // on slider change, update the layer opacity
-      slider = document.getElementById('slider')
+      var slider = document.getElementById('slider')
       slider.addEventListener('change', (e) => {
         map.setPaintProperty('labels', 'fill-opacity', e.target.valueAsNumber / 100)
       })
+
+      // on save button click, download the GeoJSON
+      window.save = () => {
+        var file = new File([JSON.stringify(data)], "labels-modified.json", {
+          type: "text/json",
+        });
+        var url = URL.createObjectURL(file)
+        multiDownload([url])
+      }
+
+      // on reset button click, reset the map source to the original data
+      window.reset = () => {
+        map.getSource('labels').setData(original)
+      }
     })
   })
 
