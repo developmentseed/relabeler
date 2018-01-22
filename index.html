@@ -10,7 +10,7 @@
         body { margin:0; padding:0; font-family: monospace;}
         #map { position:absolute; top:0; bottom:0; width:100%; z-index: 1 !important;}
         #control { position: absolute; z-index: 2; padding: 0 10px 10px; border: 1px solid #eee; margin: 10px; background-color: white; }
-        .label span { display: inline-block; height: 10px; width: 10px; margin-right: 5px; }
+        .label { display: inline-block; height: 10px; width: 10px; margin-right: 5px; }
     </style>
     <script src="https://unpkg.com/chroma-js"></script>
     <script src="https://npmcdn.com/@turf/turf/turf.min.js"></script>
@@ -43,13 +43,13 @@ fetch('http://localhost:8000/labels.geojson')
 
     // now define our classes/colors and use them to...
     var classes = data.features[0].properties.label
-    var colors = chroma.scale('Set2').colors(classes.length)
+    var colors = chroma.scale('Set2').colors(10)
 
     // ...create a legend
     var legend = document.getElementById('legend')
     classes.forEach((cl, i) => {
       var li = document.createElement('li')
-      li.innerHTML = `<span class="label" style="background-color:${colors[i]}"></span>
+      li.innerHTML = `<span class="label" style="background-color:${colors[i % 10]}"></span>
       ${i === 0 ? 'Background' : `Class ${i}`}`
       legend.appendChild(li)
     })
@@ -58,7 +58,7 @@ fetch('http://localhost:8000/labels.geojson')
     var filters = _.flatten(classes.map((cl, i) => {
       return [
         ['==', ['number', ['at', i, ['array', ['get', 'label']]]], 1],
-        colors[i]
+        colors[i % 10]
       ]
     }))
     var fillColors = ['case'].concat(filters).concat(['black'])
@@ -97,6 +97,7 @@ fetch('http://localhost:8000/labels.geojson')
 
       // on click, update the data for that tile and re-render
       map.on('click', 'labels', (e) => {
+        console.log(e);
         const feature = e.features[0]
         const label = JSON.parse(feature.properties.label)
         // shift the label by one
@@ -123,6 +124,7 @@ fetch('http://localhost:8000/labels.geojson')
       // on reset button click, reset the map source to the original data
       window.reset = () => {
         map.getSource('labels').setData(original)
+        data = original
       }
     })
   })
