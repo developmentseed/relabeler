@@ -8,37 +8,48 @@ class Control extends React.Component {
   constructor () {
     super()
 
+    this.upload = this.upload.bind(this)
     this.save = this.save.bind(this)
-    this.reset = this.reset.bind(this)
   }
 
   render () {
     const classes = [0, 1]
     return (
-      <div id="control">
-        <h4>Classes</h4>
-        <ul id="legend">
-        {classes.map((cl, i) => {
-          return (
-            <li key={cl}>
-              <span className="label" style={{backgroundColor: colors[i % 10]}}></span>
-              {i === 0 ? 'Background' : `Class ${i}`}
-            </li>
-          )
-        })}
-        </ul>
-        <h4>Label Opacity</h4>
-        <input id="slider" type="range" min={0} max={100} />
-        <button onClick={this.save} type="button" name="button">Save</button>
-        <button onClick={this.reset} type="button" name="button">Reset</button>
-      </div>
-
+      <section className='panel' id='control'>
+        <header className='panel__header'>
+          <div className='panel__headline'>
+            <h1 className='panel__title'>Relabeler</h1>
+            <p className='panel__subtitle'>Update Machine Learning Labels</p>
+          </div>
+        </header>
+        <div className='panel__body'>
+          <div className='panel__body-inner'>
+            <h4>Classes</h4>
+            <ul id='legend'>
+            {classes.map((cl, i) => {
+              return (
+                <li key={cl}>
+                  <span className='label' style={{backgroundColor: colors[i % 10]}}></span>
+                  {i === 0 ? 'Background' : `Class ${i}`}
+                </li>
+              )
+            })}
+            </ul>
+            <h4>Label Opacity</h4>
+            <input id='slider' type='range' min={0} max={100} />
+          </div>
+        </div>
+        <footer className='panel__footer'>
+          <a onClick={this.upload} className='actions__menu-item action-upload' title='Upload' href='#'><span>Upload</span></a>
+          <a onClick={this.save} className='actions__menu-item action-download' title='Save' href='#'><span>Save</span></a>
+        </footer>
+      </section>
     )
   }
 
-  save () {}
+  upload () {}
 
-  reset () {}
+  save () {}
 }
 
 export default Control

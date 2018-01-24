@@ -1,7 +1,5 @@
-'use strict';
-import logo from './logo';
+'use strict'
 
 export default {
-  environment: 'production',
-  consoleMessage: logo
-};
+  environment: 'production'
+}

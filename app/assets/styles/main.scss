@@ -21,28 +21,38 @@
  */
 
 @import "bourbon";
+@import "node_modules/jeet/jeet";
+@import "ui-seed";
 
 
-/* Reboot
-   ========================================================================== */
+#map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+}
 
-@import "normalize";
-@import "reset";
+#control {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  ul {
+    list-style: none;
+    .label { margin-right: 0.5em; }
+  }
+}
 
-/**
- * Using Kenneth Ormandy's OpenType features—ligatures, kerning, and
- * more—to Normalize.css:
- * https://github.com/kennethormandy/normalize-opentype.css
- */
+[class^="action-"],
+[class*=" action-"] {
+  @extend .button, .button--primary-raised-dark;
+}
 
-@import "normalize-opentype";
+.action-download::before {
+  @extend %uisi-download;
+}
 
+.action-upload::before {
+  @extend %uisi-upload;
+}
 
-/* Settings
-   ========================================================================== */
-
-
-/* Main
-   ========================================================================== */
-
-@import "base";
+footer > a { margin-right: 1em; }
