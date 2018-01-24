@@ -1,7 +1,9 @@
 'use strict'
 
 import React from 'react'
+import c from 'classnames'
 
+import { updateSlider } from '../actions'
 import { colors } from '../utils/colors'
 
 class Control extends React.Component {
@@ -10,6 +12,7 @@ class Control extends React.Component {
 
     this.upload = this.upload.bind(this)
     this.save = this.save.bind(this)
+    this.slide = this.slide.bind(this)
   }
 
   render () {
@@ -22,7 +25,7 @@ class Control extends React.Component {
             <p className='panel__subtitle'>Update Machine Learning Labels</p>
           </div>
         </header>
-        <div className='panel__body'>
+        <div className={c('panel__body', { disabled: !this.props.labels })}>
           <div className='panel__body-inner'>
             <h4>Classes</h4>
             <ul id='legend'>
@@ -36,7 +39,7 @@ class Control extends React.Component {
             })}
             </ul>
             <h4>Label Opacity</h4>
-            <input id='slider' type='range' min={0} max={100} />
+            <input onChange={this.slide} id='slider' type='range' min={0} max={100} />
           </div>
         </div>
         <footer className='panel__footer'>
@@ -45,6 +48,11 @@ class Control extends React.Component {
         </footer>
       </section>
     )
+  }
+
+  slide (e) {
+    console.log(e);
+    this.props.dispatch(updateSlider(e.target.valueAsNumber))
   }
 
   upload () {}
