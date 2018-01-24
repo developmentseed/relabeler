@@ -51,7 +51,7 @@ class Control extends React.Component {
   }
 
   slide (e) {
-    console.log(e);
+    console.log(e.target);
     this.props.dispatch(updateSlider(e.target.valueAsNumber))
   }
 

@@ -7,20 +7,26 @@ import Control from '../components/control'
 
 class App extends React.Component {
   render () {
-    const { dispatch } = this.props
+    const { dispatch, classes, sliderValue, labels } = this.props
     return (
       <div>
-        <Map sliderValue={this.props.sliderValue}/>
-        <Control dispatch={dispatch} />
+        <Map
+          sliderValue={sliderValue}
+          classes={classes}
+          labels={labels}
+          />
+        <Control
+          dispatch={dispatch}
+          classes={classes}
+          labels={labels}
+          />
       </div>
     )
   }
 }
 
 function mapStateToProps (state) {
-  return {
-    sliderValue: state.sliderValue
-  }
+  return state
 }
 
 module.exports = connect(mapStateToProps)(App)
