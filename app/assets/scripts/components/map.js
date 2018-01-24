@@ -50,6 +50,7 @@ class Map extends React.Component {
 
   initLabels (labels, classes) {
     this.mapData = labels
+    this.props.onDataReady(this.mapData)
     // define the colors
     const filters = flatten(classes.map((cl, i) => {
       return [
@@ -87,11 +88,14 @@ class Map extends React.Component {
 
   // on click, update the data for that tile and re-render
   onLabelClick (e) {
+    // shift the label by one
     const feature = e.features[0]
     const label = JSON.parse(feature.properties.label)
-    // shift the label by one
     const newLabel = [label.pop()].concat(label)
-    this.mapData.features[feature.id].properties.label = newLabel
+
+    // assign to the same tile
+    const tile = this.mapData.features.find(f => f.properties.tile === feature.properties.tile)
+    tile.properties.label = newLabel
     this.map.getSource('labels').setData(this.mapData)
   }
 }

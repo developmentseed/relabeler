@@ -2,6 +2,7 @@
 
 import React from 'react'
 import c from 'classnames'
+import { saveAs } from 'file-saver'
 
 import { updateSlider } from '../actions'
 import { colors } from '../utils/colors'
@@ -16,7 +17,7 @@ class Control extends React.Component {
   }
 
   render () {
-    const classes = [0, 1]
+    const { classes, labels } = this.props
     return (
       <section className='panel' id='control'>
         <header className='panel__header'>
@@ -25,7 +26,7 @@ class Control extends React.Component {
             <p className='panel__subtitle'>Update Machine Learning Labels</p>
           </div>
         </header>
-        <div className={c('panel__body', { disabled: !this.props.labels })}>
+        <div className={c('panel__body', { disabled: !labels })}>
           <div className='panel__body-inner'>
             <h4>Classes</h4>
             <ul id='legend'>
@@ -51,13 +52,16 @@ class Control extends React.Component {
   }
 
   slide (e) {
-    console.log(e.target);
-    this.props.dispatch(updateSlider(e.target.valueAsNumber))
+    this.props.dispatch(updateSlider(e.target.valueAsNumber / 100))
   }
 
   upload () {}
 
-  save () {}
+  save () {
+    const data = this.props.getMapData()
+    const blob = new Blob([JSON.stringify(data)], { type: 'application/json;charset=utf-8' })
+    saveAs(blob, 'labels.geojson')
+  }
 }
 
 export default Control
