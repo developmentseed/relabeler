@@ -4,9 +4,17 @@
     "es6": true,
     "browser": true
   },
+  "plugins": [
+    "react"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
   "rules": {
-    "semi": [2, "always"],
-    "no-extra-semi": 2,
-    "semi-spacing": [2, { "before": false, "after": true }]
+    "react/jsx-uses-react": 2,
+    "react/jsx-uses-vars": 2,
   }
 }

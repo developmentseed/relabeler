@@ -4,7 +4,7 @@
 - Allows GUI relabeling (save and convert back to `.npz`)
 - Seems useful for correcting data errors prior to ML input
 
-![showing relabler in use](relabeler.gif)
+![showing relabeler in use](relabeler.gif)
 
 ### Use
 - Put `labels.geojson` file in this root folder
