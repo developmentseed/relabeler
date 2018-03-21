@@ -3,9 +3,19 @@
 import React from 'react'
 import flatten from 'lodash.flatten'
 import bbox from '@turf/bbox'
+import {KNNImageClassifier} from 'deeplearn-knn-image-classifier'
+import * as dl from 'deeplearn'
 
 import config from '../config'
 import { colors } from '../utils/colors'
+
+// Number of classes to classify
+const NUM_CLASSES = 3
+// Webcam Image size. Must be 227.
+const IMAGE_SIZE = 227
+// K value for KNN
+const TOPK = 10
+const ACCESS_TOKEN = 'pk.eyJ1IjoiZGV2c2VlZCIsImEiOiJnUi1mbkVvIn0.018aLhX0Mb0tdtaT2QNe2Q'
 
 class Map extends React.Component {
   constructor () {
@@ -14,6 +24,20 @@ class Map extends React.Component {
     this.updateOpacity = this.updateOpacity.bind(this)
     this.onLabelClick = this.onLabelClick.bind(this)
     this.initLabels = this.initLabels.bind(this)
+    this.loadDataToModel = this.loadDataToModel.bind(this)
+    this.predictAll = this.predictAll.bind(this)
+    window.predictAll = this.predictAll
+
+    // Initiate deeplearn.js math and knn classifier objects
+    this.knn = new KNNImageClassifier(NUM_CLASSES, TOPK)
+
+    // Load knn model
+    this.knn.load()
+    .then(() => {
+      console.log(this.mapData)
+      this.loadDataToModel(this.mapData.features)
+    })
+    window.knn = this.knn
   }
 
   initMap (el) {
@@ -60,6 +84,11 @@ class Map extends React.Component {
     }))
     const fillColors = ['case'].concat(filters).concat(['black'])
 
+    const outline = ['case',
+      ['to-boolean', ['get', 'predicted']], 'purple',
+      'white'
+    ]
+
     // load the data
     this.map.addSource('labels', {
       type: 'geojson',
@@ -72,7 +101,7 @@ class Map extends React.Component {
       'type': 'fill',
       'paint': {
         'fill-color': fillColors,
-        'fill-outline-color': 'white',
+        'fill-outline-color': outline,
         'fill-opacity': 0.5
       }
     })
@@ -97,6 +126,52 @@ class Map extends React.Component {
     const tile = this.mapData.features.find(f => f.properties.tile === feature.properties.tile)
     tile.properties.label = newLabel
     this.map.getSource('labels').setData(this.mapData)
+  }
+
+  loadDataToModel (data) {
+    data.slice(0, 100).forEach(feature => {
+      const [x, y, z] = feature.properties.tile.split('-')
+      fetch(`http://api.mapbox.com/v4/mapbox.satellite/${z}/${x}/${y}.jpg?access_token=${ACCESS_TOKEN}`)
+      .then(resp => resp.blob())
+      .then(blob => {
+        const img = new Image()
+        img.onload = () => {
+          const image = dl.fromPixels(img)
+          const resize = dl.image.resizeBilinear(image, [IMAGE_SIZE, IMAGE_SIZE])
+          this.knn.addImage(resize, feature.properties.label.indexOf(1))
+        }
+        img.src = URL.createObjectURL(blob)
+        document.body.appendChild(img)
+      })
+    })
+  }
+
+  predictAll () {
+    this.mapData.features.forEach(feature => {
+      const [x, y, z] = feature.properties.tile.split('-')
+      return fetch(`http://api.mapbox.com/v4/mapbox.satellite/${z}/${x}/${y}.jpg?access_token=${ACCESS_TOKEN}`)
+      .then(resp => resp.blob())
+      .then(blob => {
+        return new Promise(resolve => {
+          const img = new Image()
+          img.onload = () => resolve(img)
+          img.src = URL.createObjectURL(blob)
+        })
+      })
+      .then(img => {
+        const image = dl.fromPixels(img)
+        const resize = dl.image.resizeBilinear(image, [IMAGE_SIZE, IMAGE_SIZE])
+
+        return this.knn.predictClass(resize)
+      })
+      .then(prediction => {
+        const label = [0, 0]
+        label[prediction.classIndex] = 1
+        feature.properties.label = label
+        feature.properties.predicted = true
+        this.map.getSource('labels').setData(this.mapData)
+      })
+    })
   }
 }
 
