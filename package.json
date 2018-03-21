@@ -87,6 +87,7 @@
     "lodash.debounce": "^4.0.8",
     "lodash.defaultsdeep": "^4.6.0",
     "lodash.flatten": "^4.4.0",
+    "p-queue": "^2.3.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.6",

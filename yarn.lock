@@ -4537,6 +4537,10 @@ p-finally@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/p-finally/-/p-finally-1.0.0.tgz#3fbcfb15b899a44123b34b6dcc18b724336a2cae"
 
+p-queue@^2.3.1:
+  version "2.3.1"
+  resolved "https://registry.npmjs.org/p-queue/-/p-queue-2.3.1.tgz#672c54d190d99bb63fff4dbd0db26380a3602f59"
+
 pako@~0.2.0:
   version "0.2.9"
   resolved "https://registry.yarnpkg.com/pako/-/pako-0.2.9.tgz#f3f7522f4ef782348da8161bad9ecfd51bf83a75"

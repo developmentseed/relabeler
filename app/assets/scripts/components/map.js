@@ -7,10 +7,14 @@ import bbox from '@turf/bbox'
 import {KNNImageClassifier} from 'deeplearn-knn-image-classifier'
 import * as dl from 'deeplearn'
 import shuffle from 'shuffle-array'
+import PQueue from 'p-queue'
 
 import config from '../config'
 import { colors } from '../utils/colors'
 import { updatePredictReady } from '../actions'
+
+// limit our image requests
+const queue = new PQueue({ concurrency: 3 })
 
 // Number of classes to classify
 const NUM_CLASSES = 3
@@ -86,7 +90,8 @@ class Map extends React.Component {
     const fillColors = ['case'].concat(filters).concat(['black'])
 
     const outline = ['case',
-      ['to-boolean', ['get', 'predicted']], 'purple',
+      ['==', ['to-string', ['get', 'use']], 'training'], 'red',
+      ['==', ['to-string', ['get', 'use']], 'prediction'], 'blue',
       'white'
     ]
 
@@ -138,33 +143,39 @@ class Map extends React.Component {
       .then(img => {
         const image = dl.fromPixels(img)
         const resize = dl.image.resizeBilinear(image, [IMAGE_SIZE, IMAGE_SIZE])
+        // show that this is part of the training
+        feature.properties.use = 'training'
         return this.knn.addImage(resize, feature.properties.label.indexOf(1))
       })
     }))
     .then(() => {
+      this.updateMap()
       this.props.dispatch(updatePredictReady(true))
     })
   }
 
   predictAll () {
-    this.mapData.features.forEach(feature => {
+    this.mapData.features
+    .filter(feature => feature.properties.use !== 'training')
+    .forEach(feature => {
       const [x, y, z] = feature.properties.tile.split('-')
-      return fetch(`http://api.mapbox.com/v4/mapbox.satellite/${z}/${x}/${y}.jpg?access_token=${ACCESS_TOKEN}`)
-      .then(resp => resp.blob())
-      .then(blob => blobToImage(blob))
-      .then(img => {
-        const image = dl.fromPixels(img)
-        const resize = dl.image.resizeBilinear(image, [IMAGE_SIZE, IMAGE_SIZE])
+      queue.add(() => fetch(`http://api.mapbox.com/v4/mapbox.satellite/${z}/${x}/${y}.jpg?access_token=${ACCESS_TOKEN}`)
+        .then(resp => resp.blob())
+        .then(blob => blobToImage(blob))
+        .then(img => {
+          const image = dl.fromPixels(img)
+          const resize = dl.image.resizeBilinear(image, [IMAGE_SIZE, IMAGE_SIZE])
 
-        return this.knn.predictClass(resize)
-      })
-      .then(prediction => {
-        const label = [0, 0]
-        label[prediction.classIndex] = 1
-        feature.properties.label = label
-        feature.properties.predicted = true
-        this.updateMap()
-      })
+          return this.knn.predictClass(resize)
+        })
+        .then(prediction => {
+          const label = [0, 0]
+          label[prediction.classIndex] = 1
+          feature.properties.label = label
+          feature.properties.use = 'prediction'
+          this.updateMap()
+        })
+      )
     })
   }
 
