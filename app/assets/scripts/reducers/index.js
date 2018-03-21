@@ -1,8 +1,9 @@
-import { UPDATE_SLIDER, UPDATE_LABELS } from '../actions'
+import { UPDATE_SLIDER, UPDATE_LABELS, UPDATE_PREDICT_READY } from '../actions'
 
 const initial = {
   sliderValue: 50,
-  classes: []
+  classes: [],
+  predictReady: false
 }
 
 const reducer = (state = initial, action) => {
@@ -14,6 +15,8 @@ const reducer = (state = initial, action) => {
         classes: action.data.features[0].properties.label,
         labels: action.data
       })
+    case UPDATE_PREDICT_READY:
+      return Object.assign({}, state, { predictReady: action.data })
     default:
       return state
   }

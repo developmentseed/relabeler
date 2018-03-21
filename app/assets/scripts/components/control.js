@@ -17,7 +17,7 @@ class Control extends React.Component {
   }
 
   render () {
-    const { classes, labels } = this.props
+    const { classes, labels, predictReady } = this.props
     return (
       <section className='panel' id='control'>
         <header className='panel__header'>
@@ -46,6 +46,7 @@ class Control extends React.Component {
         <footer className='panel__footer'>
           <a onClick={this.upload} className='actions__menu-item action-upload' title='Upload' href='#'><span>Upload</span></a>
           <a onClick={this.save} className='actions__menu-item action-download' title='Save' href='#'><span>Save</span></a>
+          <a onClick={this.props.predict} className={c('actions__menu-item', { disabled: !predictReady })} title='Predict' href='#'><span>Predict</span></a>
         </footer>
       </section>
     )

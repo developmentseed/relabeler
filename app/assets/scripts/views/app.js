@@ -11,16 +11,18 @@ class App extends React.Component {
 
     this.storeMapData = this.storeMapData.bind(this)
     this.getMapData = this.getMapData.bind(this)
+    this.predict = this.predict.bind(this)
   }
 
   render () {
-    const { dispatch, classes, sliderValue, labels } = this.props
+    const { dispatch, classes, sliderValue, labels, predictReady } = this.props
     return (
       <div>
         <Map
           sliderValue={sliderValue}
           classes={classes}
           labels={labels}
+          dispatch={dispatch}
           onDataReady={this.storeMapData}
           />
         <Control
@@ -28,17 +30,24 @@ class App extends React.Component {
           classes={classes}
           labels={labels}
           getMapData={this.getMapData}
+          predictReady={predictReady}
+          predict={this.predict}
           />
       </div>
     )
   }
 
-  storeMapData (data) {
+  storeMapData (data, fn) {
     this.mapData = data
+    this.predictAll = fn
   }
 
   getMapData () {
     return this.mapData
+  }
+
+  predict () {
+    this.predictAll()
   }
 }
 

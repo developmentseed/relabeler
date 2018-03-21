@@ -2,12 +2,15 @@
 'use strict'
 import React from 'react'
 import flatten from 'lodash.flatten'
+import debounce from 'lodash.debounce'
 import bbox from '@turf/bbox'
 import {KNNImageClassifier} from 'deeplearn-knn-image-classifier'
 import * as dl from 'deeplearn'
+import shuffle from 'shuffle-array'
 
 import config from '../config'
 import { colors } from '../utils/colors'
+import { updatePredictReady } from '../actions'
 
 // Number of classes to classify
 const NUM_CLASSES = 3
@@ -26,7 +29,7 @@ class Map extends React.Component {
     this.initLabels = this.initLabels.bind(this)
     this.loadDataToModel = this.loadDataToModel.bind(this)
     this.predictAll = this.predictAll.bind(this)
-    window.predictAll = this.predictAll
+    this.updateMap = debounce(this.updateMap.bind(this), 500)
 
     // Initiate deeplearn.js math and knn classifier objects
     this.knn = new KNNImageClassifier(NUM_CLASSES, TOPK)
@@ -34,10 +37,8 @@ class Map extends React.Component {
     // Load knn model
     this.knn.load()
     .then(() => {
-      console.log(this.mapData)
-      this.loadDataToModel(this.mapData.features)
+      this.loadDataToModel(this.mapData.features, this.predictAll)
     })
-    window.knn = this.knn
   }
 
   initMap (el) {
@@ -74,7 +75,7 @@ class Map extends React.Component {
 
   initLabels (labels, classes) {
     this.mapData = labels
-    this.props.onDataReady(this.mapData)
+    this.props.onDataReady(this.mapData, this.predictAll)
     // define the colors
     const filters = flatten(classes.map((cl, i) => {
       return [
@@ -129,20 +130,19 @@ class Map extends React.Component {
   }
 
   loadDataToModel (data) {
-    data.slice(0, 100).forEach(feature => {
+    Promise.all(shuffle(data).slice(0, 100).map(feature => {
       const [x, y, z] = feature.properties.tile.split('-')
-      fetch(`http://api.mapbox.com/v4/mapbox.satellite/${z}/${x}/${y}.jpg?access_token=${ACCESS_TOKEN}`)
+      return fetch(`http://api.mapbox.com/v4/mapbox.satellite/${z}/${x}/${y}.jpg?access_token=${ACCESS_TOKEN}`)
       .then(resp => resp.blob())
-      .then(blob => {
-        const img = new Image()
-        img.onload = () => {
-          const image = dl.fromPixels(img)
-          const resize = dl.image.resizeBilinear(image, [IMAGE_SIZE, IMAGE_SIZE])
-          this.knn.addImage(resize, feature.properties.label.indexOf(1))
-        }
-        img.src = URL.createObjectURL(blob)
-        document.body.appendChild(img)
+      .then(blob => blobToImage(blob))
+      .then(img => {
+        const image = dl.fromPixels(img)
+        const resize = dl.image.resizeBilinear(image, [IMAGE_SIZE, IMAGE_SIZE])
+        return this.knn.addImage(resize, feature.properties.label.indexOf(1))
       })
+    }))
+    .then(() => {
+      this.props.dispatch(updatePredictReady(true))
     })
   }
 
@@ -151,13 +151,7 @@ class Map extends React.Component {
       const [x, y, z] = feature.properties.tile.split('-')
       return fetch(`http://api.mapbox.com/v4/mapbox.satellite/${z}/${x}/${y}.jpg?access_token=${ACCESS_TOKEN}`)
       .then(resp => resp.blob())
-      .then(blob => {
-        return new Promise(resolve => {
-          const img = new Image()
-          img.onload = () => resolve(img)
-          img.src = URL.createObjectURL(blob)
-        })
-      })
+      .then(blob => blobToImage(blob))
       .then(img => {
         const image = dl.fromPixels(img)
         const resize = dl.image.resizeBilinear(image, [IMAGE_SIZE, IMAGE_SIZE])
@@ -169,10 +163,22 @@ class Map extends React.Component {
         label[prediction.classIndex] = 1
         feature.properties.label = label
         feature.properties.predicted = true
-        this.map.getSource('labels').setData(this.mapData)
+        this.updateMap()
       })
     })
   }
+
+  updateMap () {
+    this.map.getSource('labels').setData(this.mapData)
+  }
+}
+
+function blobToImage (blob) {
+  return new Promise(resolve => {
+    const img = new Image()
+    img.onload = () => resolve(img)
+    img.src = URL.createObjectURL(blob)
+  })
 }
 
 export default Map
