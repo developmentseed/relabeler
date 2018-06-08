@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 
 import Map from '../components/map'
 import Control from '../components/control'
+import Pane from '../components/pane'
 
 class App extends React.Component {
   constructor () {
@@ -14,21 +15,28 @@ class App extends React.Component {
   }
 
   render () {
-    const { dispatch, classes, sliderValue, labels } = this.props
+    const { dispatch, sliderValue, tiles, tileUrl, tile } = this.props
     return (
       <div>
         <Map
           sliderValue={sliderValue}
-          classes={classes}
-          labels={labels}
           onDataReady={this.storeMapData}
+          tileUrl={tileUrl}
+          tiles={tiles}
+          dispatch={dispatch}
+          tile={tile}
           />
         <Control
           dispatch={dispatch}
-          classes={classes}
-          labels={labels}
+          tileUrl={tileUrl}
           getMapData={this.getMapData}
           />
+        <Pane
+          tiles={tiles}
+          tileUrl={tileUrl}
+          tile={tile}
+          dispatch={dispatch}
+        />
       </div>
     )
   }

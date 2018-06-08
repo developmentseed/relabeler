@@ -29,7 +29,8 @@
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 100%;
+  left: 0;
+  width: 70%;
 }
 
 #control {
@@ -40,6 +41,14 @@
     list-style: none;
     .label { margin-right: 0.5em; }
   }
+}
+
+#pane {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 30%;
 }
 
 [class^="action-"],
@@ -56,3 +65,19 @@
 }
 
 footer > a { margin-right: 1em; }
+
+.active {
+  background-color: lightblue;
+}
+
+.good {
+  border: 2px solid green;
+}
+
+.bad {
+  border: 2px solid red;
+}
+
+img {
+  vertical-align: baseline;
+}

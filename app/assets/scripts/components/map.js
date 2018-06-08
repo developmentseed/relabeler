@@ -1,41 +1,88 @@
 /* global mapboxgl */
 'use strict'
 import React from 'react'
-import flatten from 'lodash.flatten'
-import bbox from '@turf/bbox'
+import tilebelt from 'tilebelt'
+import centroid from '@turf/centroid'
 
 import config from '../config'
-import { colors } from '../utils/colors'
+import { updateTile } from '../actions'
+import { emptyStyle } from '../utils/map'
 
 class Map extends React.Component {
   constructor () {
     super()
 
+    this.onClick = this.onClick.bind(this)
     this.updateOpacity = this.updateOpacity.bind(this)
-    this.onLabelClick = this.onLabelClick.bind(this)
-    this.initLabels = this.initLabels.bind(this)
   }
 
   initMap (el) {
     if (!this.map) {
-      mapboxgl.accessToken = config.mbToken
       const map = this.map = new mapboxgl.Map({
-        center: [0, 0],
+        center: [39.1387939453125, -6.719164960283204],
         container: el,
-        style: 'mapbox://styles/mapbox/satellite-streets-v9',
-        zoom: 5,
+        zoom: 12,
+        style: emptyStyle,
         pitchWithRotate: false,
         dragRotate: false
       })
+      // window.map = map
+
       map.on('load', () => {
-        map.on('click', 'labels', this.onLabelClick)
+        map.on('click', this.onClick)
+        map.addSource('imagery', {
+          type: 'raster',
+          tiles: [
+            this.props.tileUrl.match('mapbox') ? this.props.tileUrl + `?access_token=${config.mbToken}` : this.props.tileUrl
+          ]
+        })
+        map.addLayer({
+          id: 'imagery',
+          source: 'imagery',
+          type: 'raster'
+        })
+        map.addSource('labels', {
+          type: 'raster',
+          tiles: [
+            'http://localhost:5000/{z}/{x}/{y}.png'
+          ]
+        })
+        map.addLayer({
+          id: 'labels',
+          source: 'labels',
+          type: 'raster'
+        })
+        map.addSource('tile', {
+          type: 'geojson',
+          data: {
+            type: 'Feature',
+            properties: {},
+            geometry: {
+              type: 'Point',
+              coordinates: [0, 0]
+            }
+          }
+        })
+        map.addLayer({
+          id: 'tile',
+          source: 'tile',
+          type: 'line',
+          paint: {
+            'line-color': 'lightblue',
+            'line-width': 3
+          }
+        })
       })
     }
   }
 
   componentWillReceiveProps (nextProps) {
-    if (!this.mapData && nextProps.labels) {
-      this.initLabels(nextProps.labels, nextProps.classes)
+    if (nextProps.tile && nextProps.tile !== this.props.tile) {
+      const { tile } = nextProps
+      const g = tilebelt.tileToGeoJSON(tile.split('-').map(Number))
+      const c = centroid(g)
+      this.map.jumpTo({ center: c.geometry.coordinates })
+      this.map.getSource('tile').setData(g)
     }
     if (nextProps.sliderValue !== this.props.sliderValue) {
       this.updateOpacity(nextProps.sliderValue)
@@ -48,55 +95,14 @@ class Map extends React.Component {
     )
   }
 
-  initLabels (labels, classes) {
-    this.mapData = labels
-    this.props.onDataReady(this.mapData)
-    // define the colors
-    const filters = flatten(classes.map((cl, i) => {
-      return [
-        ['==', ['number', ['at', i, ['array', ['get', 'label']]]], 1],
-        colors[i % 10]
-      ]
-    }))
-    const fillColors = ['case'].concat(filters).concat(['black'])
-
-    // load the data
-    this.map.addSource('labels', {
-      type: 'geojson',
-      data: labels
-    })
-    // show the data
-    this.map.addLayer({
-      'id': 'labels',
-      'source': 'labels',
-      'type': 'fill',
-      'paint': {
-        'fill-color': fillColors,
-        'fill-outline-color': 'white',
-        'fill-opacity': 0.5
-      }
-    })
-
-    const box = bbox(labels)
-    // zoom to the data
-    this.map.fitBounds([[box[0], box[1]], [box[2], box[3]]])
-  }
-
   updateOpacity (value) {
-    this.map.setPaintProperty('labels', 'fill-opacity', value)
+    this.map.setPaintProperty('labels', 'raster-opacity', value)
   }
 
-  // on click, update the data for that tile and re-render
-  onLabelClick (e) {
-    // shift the label by one
-    const feature = e.features[0]
-    const label = JSON.parse(feature.properties.label)
-    const newLabel = [label.pop()].concat(label)
-
-    // assign to the same tile
-    const tile = this.mapData.features.find(f => f.properties.tile === feature.properties.tile)
-    tile.properties.label = newLabel
-    this.map.getSource('labels').setData(this.mapData)
+  onClick (e) {
+    const tile = tilebelt.pointToTile(e.lngLat.lng, e.lngLat.lat, 16)
+      .join('-')
+    this.props.dispatch(updateTile(tile))
   }
 }
 

@@ -1,3 +1,4 @@
+/* global mapboxgl */
 'use strict'
 
 import React from 'react'
@@ -9,7 +10,8 @@ import { createLogger } from 'redux-logger'
 
 import config from './config'
 import reducer from './reducers'
-import { updateLabels } from './actions'
+
+mapboxgl.accessToken = config.mbToken
 
 const logger = createLogger({
   level: 'info',
@@ -26,11 +28,6 @@ const store = createStore(
     logger
   )
 )
-
-const data = require('../labels')
-setTimeout(() => {
-  store.dispatch(updateLabels(data))
-}, 1000)
 
 // Components
 import App from './views/app'
