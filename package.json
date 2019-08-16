@@ -8,12 +8,17 @@
     "mapbox-gl": "^1.2.1",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
+    "react-files": "^2.4.8",
     "react-redux": "^7.1.0",
     "react-scripts": "3.1.0",
     "redux": "^4.0.4",
     "redux-api-middleware": "^3.0.1",
     "redux-thunk": "^2.3.0",
     "typeface-roboto": "^0.0.75"
+  },
+  "devDependencies": {
+    "gh-pages": "^2.0.1",
+    "prettier": "^1.14.3"
   },
   "author": {
     "name": "Development Seed",
@@ -24,7 +29,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "format": "./node_modules/.bin/prettier --single-quote --write --print-width 100 src/**/*.js src/*.js"
+
   },
   "eslintConfig": {
     "extends": "react-app"

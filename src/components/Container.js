@@ -1,15 +1,13 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { withStyles } from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
-import AppBar from "@material-ui/core/AppBar";
-import Control from "./Control";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import AppBar from '@material-ui/core/AppBar';
+import Control from './Control';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
 
-// import Toolbar from './Toolbar';
-// import FilterTabs from './FilterTabs';
-import Map from "./Map";
+import Map from './Map';
 const styles = theme => ({
   root: {
     flexGrow: 1
@@ -19,19 +17,19 @@ const styles = theme => ({
   },
   sidebar: {
     color: theme.palette.text.secondary,
-    display: "flex",
-    flexFlow: "column",
-    height: "100%"
+    display: 'flex',
+    flexFlow: 'column',
+    height: '100%'
   },
   mainContainer: {
-    height: "calc(100vh - 64px)"
+    height: 'calc(100vh - 64px)'
     // marginTop: '64px'
   },
   title: {
-    color:'#fff'
+    color: '#fff'
   },
-  toolbar:{
-    background:'#534e4e',
+  toolbar: {
+    background: '#534e4e'
   }
 });
 
@@ -40,7 +38,7 @@ export const Container = props => {
   return (
     <div className={classes.root}>
       <AppBar position="static">
-        <Toolbar  className={classes.toolbar}>
+        <Toolbar className={classes.toolbar}>
           <Typography variant="h5" className={classes.title}>
             Relabeler
             <Typography variant="caption" className={classes.title}>
