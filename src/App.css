@@ -31,3 +31,12 @@
     transform: rotate(360deg);
   }
 }
+
+.files-dropzone-list {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  padding: 10px;
+  border: 1px dashed #D3D3D3;
+  cursor: pointer;
+}

@@ -30,17 +30,16 @@ class Loadfile extends Component {
     return (
       <div className="files">
         <Files
-          className="files-dropzone"
+          className="files-dropzone-list"
           onChange={this.onFilesChange}
           onError={this.onFilesError}
           accepts={['.geojson', '.json']}
-          multiple
-          maxFiles={3}
+          maxFiles={1}
           maxFileSize={10000000}
           minFileSize={0}
           clickable
         >
-          Upload the file
+          <input type="submit" value="Choose a file or drag here" />
         </Files>
       </div>
     );
