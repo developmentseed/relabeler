@@ -3,7 +3,7 @@ import 'typeface-roboto'; // eslint-disable-line
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import bbox from '@turf/bbox'
+import bbox from '@turf/bbox';
 
 import Map from './components/Map';
 import Header from './components/Header';
@@ -26,9 +26,9 @@ class App extends Component {
         <Header />
         <Grid container spacing={0} className={classes.mainContainer}>
           <Control
-            // sliderValue={sliderValue}
-            // classes={classes}
-            // labels={labels}
+          // sliderValue={sliderValue}
+          // classes={classes}
+          // labels={labels}
           />
           <Grid item xs={12} sm={12}>
             <Map />

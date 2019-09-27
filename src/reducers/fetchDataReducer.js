@@ -1,13 +1,15 @@
 import {
   FETCH_DATA_BEGIN,
   FETCH_DATA_SUCCESS,
-  FETCH_DATA_FAILURE
-} from "../actions/fetchDataActions";
+  FETCH_DATA_FAILURE,
+  SET_CLASSES
+} from '../actions/fetchDataActions';
 
 const initialState = {
   data: {},
   loading: true,
-  error: null
+  error: null,
+  classes: []
 };
 
 export default function dataReducer(state = initialState, action) {
@@ -22,7 +24,8 @@ export default function dataReducer(state = initialState, action) {
       return {
         ...state,
         loading: false,
-        data: action.payload.fData
+        data: action.payload.fData,
+        classes: action.payload.classes
       };
     case FETCH_DATA_FAILURE:
       return {

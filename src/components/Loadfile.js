@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import Files from 'react-files';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { fetchData } from "./../actions/fetchDataActions";
+import { fetchData } from './../actions/fetchDataActions';
 
 class Loadfile extends Component {
   constructor(props) {
