@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import Files from 'react-files';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import * as actions from '../actions';
+import { fetchData } from "./../actions/fetchDataActions";
 
 class Loadfile extends Component {
   constructor(props) {
@@ -12,14 +12,7 @@ class Loadfile extends Component {
   }
 
   onFilesChange(files) {
-    const fileReader = new FileReader();
-    const self = this;
-    fileReader.onload = function(e) {
-      const jsonFile = JSON.parse(fileReader.result);
-      self.props.dispatch(actions.loadFileAction(jsonFile));
-    };
-    console.log(files);
-    fileReader.readAsText(files[0]);
+    this.props.dispatch(fetchData(files));
   }
 
   onFilesError(error, file) {
@@ -35,11 +28,11 @@ class Loadfile extends Component {
           onError={this.onFilesError}
           accepts={['.geojson', '.json']}
           maxFiles={1}
-          maxFileSize={10000000}
+          maxFileSize={1000000000}
           minFileSize={0}
           clickable
         >
-          <input type="submit" value="Choose a file or drag here" />
+          <input type="submit" value="Choose a file" />
         </Files>
       </div>
     );

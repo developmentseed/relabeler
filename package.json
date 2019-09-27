@@ -5,6 +5,8 @@
   "dependencies": {
     "@material-ui/core": "^3.9.0",
     "@material-ui/icons": "^3.0.2",
+    "@turf/bbox": "^6.0.1",
+    "chroma-js": "^2.0.6",
     "mapbox-gl": "^1.2.1",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
@@ -31,7 +33,6 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "format": "./node_modules/.bin/prettier --single-quote --write --print-width 100 src/**/*.js src/*.js"
-
   },
   "eslintConfig": {
     "extends": "react-app"

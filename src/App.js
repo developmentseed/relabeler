@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 import 'typeface-roboto'; // eslint-disable-line
-import { Provider } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+import bbox from '@turf/bbox'
 
 import Map from './components/Map';
 import Header from './components/Header';
 import Control from './components/Control';
-
-import createStore from './store/store';
 
 const styles = theme => ({
   root: {
@@ -22,12 +20,16 @@ const styles = theme => ({
 
 class App extends Component {
   render() {
-    const { classes } = this.props;
+    const { classes, sliderValue } = this.props;
     return (
       <div className={classes.root}>
         <Header />
         <Grid container spacing={0} className={classes.mainContainer}>
-          <Control />
+          <Control
+            // sliderValue={sliderValue}
+            // classes={classes}
+            // labels={labels}
+          />
           <Grid item xs={12} sm={12}>
             <Map />
           </Grid>

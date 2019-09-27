@@ -1,14 +1,6 @@
-import { LOAD_FILE } from '../constants';
+import { combineReducers } from "redux";
+import geojsonData from "./fetchDataReducer";
 
-const initialState = {
-  data: {}
-};
-
-function loadFile(state = initialState, action) {
-  if (action.type === LOAD_FILE) {
-    state = Object.assign({}, action.payload);
-  }
-  return state;
-}
-
-export default { loadFile };
+export default combineReducers({
+    geojsonData
+});

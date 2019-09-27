@@ -8,15 +8,14 @@ import config from '../config'
 import { colors } from '../utils/colors'
 
 class Map extends React.Component {
-  constructor () {
+  constructor() {
     super()
-
     this.updateOpacity = this.updateOpacity.bind(this)
     this.onLabelClick = this.onLabelClick.bind(this)
     this.initLabels = this.initLabels.bind(this)
   }
 
-  initMap (el) {
+  initMap(el) {
     if (!this.map) {
       mapboxgl.accessToken = config.mbToken
       const map = this.map = new mapboxgl.Map({
@@ -33,7 +32,7 @@ class Map extends React.Component {
     }
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) {
     if (!this.mapData && nextProps.labels) {
       this.initLabels(nextProps.labels, nextProps.classes)
     }
@@ -42,13 +41,13 @@ class Map extends React.Component {
     }
   }
 
-  render () {
+  render() {
     return (
       <div id='map' ref={this.initMap.bind(this)}></div>
     )
   }
 
-  initLabels (labels, classes) {
+  initLabels(labels, classes) {
     this.mapData = labels
     this.props.onDataReady(this.mapData)
     // define the colors
@@ -82,21 +81,20 @@ class Map extends React.Component {
     this.map.fitBounds([[box[0], box[1]], [box[2], box[3]]])
   }
 
-  updateOpacity (value) {
+  updateOpacity(value) {
     this.map.setPaintProperty('labels', 'fill-opacity', value)
   }
 
   // on click, update the data for that tile and re-render
-  onLabelClick (e) {
+  onLabelClick(e) {
     // shift the label by one
     const feature = e.features[0]
-    const label = JSON.parse(feature.properties.label)
-    const newLabel = [label.pop()].concat(label)
-
+    const status = feature.properties.status || 'no';
+    const newStatus = (status == 'no') ? 'yes' : 'no';
     // assign to the same tile
-    const tile = this.mapData.features.find(f => f.properties.tile === feature.properties.tile)
-    tile.properties.label = newLabel
-    this.map.getSource('labels').setData(this.mapData)
+    const tile = this.data.features.find(f => f.properties.tile === feature.properties.tile)
+    tile.properties.status = newStatus;
+    this.map.getSource('labels').setData(this.data)
   }
 }
 
