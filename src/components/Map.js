@@ -57,25 +57,18 @@ class Map extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    // !
-
+    console.log('------------------------------------');
+    console.log(nextProps.currentlabel);
+    console.log('------------------------------------');
     if (nextProps.data) {
-      this.initLabels(nextProps.data, nextProps.classes);
+      this.initLabels(nextProps.data, nextProps.currentlabel);
     }
   }
 
-  initLabels(labels, classes) {
-    // load the data
-    // const filters = flatten(classes.map((cl, i) => {
-    //   return [
-    //     ['==', ['number', ['at', i, ['array', ['get', 'label']]]], 1],
-    //     colors[i % 10]
-    //   ]
-    // }))
-    //Start in the 0 class
+  initLabels(data, currentlabel) {
     const filters = [
-      ['==', ['number', ['at', 0, ['array', ['get', 'label']]]], 1],
-      classes[0].color
+      ['==', ['number', ['at', currentlabel.id, ['array', ['get', 'label']]]], 1],
+      currentlabel.color
     ];
     const fillColors = ['case'].concat(filters).concat(['black']);
     const paintLayer = {
@@ -92,19 +85,13 @@ class Map extends Component {
     if (!this.map.getSource('labels')) {
       this.map.addSource('labels', {
         type: 'geojson',
-        data: labels
+        data: data
       });
-      // show the data
-      this.map.addLayer(paintLayer);
+    } else {
+      this.map.removeLayer('labels');
     }
-
-    // this.map.setStyle(paintLayer);
-
-    // console.log('------------------------------------');
-    // console.log(this.map.getStyle().layers);
-    // console.log('------------------------------------');
-
-    const box = bbox(labels);
+    this.map.addLayer(paintLayer);
+    const box = bbox(data);
     // zoom to the data
     this.map.fitBounds([[box[0], box[1]], [box[2], box[3]]]);
   }
@@ -131,7 +118,8 @@ const mapStateToProps = state => ({
   data: state.geojsonData.data,
   loading: state.geojsonData.loading,
   error: state.geojsonData.error,
-  classes: state.geojsonData.classes
+  labels: state.geojsonData.labels,
+  currentlabel: state.geojsonData.label
 });
 
 export default connect(mapStateToProps)(Map);

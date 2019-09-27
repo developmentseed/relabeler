@@ -3,15 +3,16 @@ import { colors } from './../utils/colors';
 export const FETCH_DATA_BEGIN = 'FETCH_DATA_BEGIN';
 export const FETCH_DATA_SUCCESS = 'FETCH_DATA_SUCCESS';
 export const FETCH_DATA_FAILURE = 'FETCH_DATA_FAILURE';
+export const SET_LABEL = 'SET_LABEL';
 
 export const fetchDataBegin = () => ({
   type: FETCH_DATA_BEGIN
 });
 
-export const fetchDataSuccess = (fData, classes) => {
+export const fetchDataSuccess = (fData, labels, label) => {
   return {
     type: FETCH_DATA_SUCCESS,
-    payload: { fData, classes }
+    payload: { fData, labels, label }
   };
 };
 
@@ -20,22 +21,27 @@ export const fetchDataFailure = error => ({
   payload: { error }
 });
 
+export const setLabel = label => ({
+  type: SET_LABEL,
+  payload: { label }
+});
+
 export function fetchData(files) {
   return dispatch => {
     dispatch(fetchDataBegin());
     const fileReader = new FileReader();
     fileReader.onload = function(e) {
       const geojson = JSON.parse(fileReader.result);
-
-      //Get classes from the source
-      const classes = geojson.features[0].properties.label.map((lab, i) => {
+      //Get labels from the source
+      const labels = geojson.features[0].properties.label.map((lab, i) => {
         return {
+          id: i,
           class: `Class ${i + 1}`,
           color: colors[i % 10]
         };
       });
 
-      dispatch(fetchDataSuccess(geojson, classes));
+      dispatch(fetchDataSuccess(geojson, labels, labels[0]));
     };
     fileReader.readAsText(files[0]);
   };
