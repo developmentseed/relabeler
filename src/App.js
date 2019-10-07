@@ -7,7 +7,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 
 import Map from './components/Map';
 import Header from './components/Header';
-import Control from './components/Control';
+import Sidebar from './components/Sidebar';
 
 const styles = theme => ({
   root: {
@@ -26,11 +26,7 @@ class App extends Component {
         <CssBaseline />
         <Header />
         <Grid container spacing={0} className={classes.mainContainer}>
-          <Control
-          // sliderValue={sliderValue}
-          // classes={classes}
-          // labels={labels}
-          />
+          <Sidebar />
           <Grid item xs={12} sm={12}>
             <Map />
           </Grid>

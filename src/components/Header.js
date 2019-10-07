@@ -35,7 +35,7 @@ export const Header = props => {
         <Typography variant="h5" className={classes.title}>
           Relabeler
           <Typography variant="caption" className={classes.title}>
-            Update Machine Learning Labels
+            Updating Machine Learning Labels
           </Typography>
         </Typography>
       </Toolbar>

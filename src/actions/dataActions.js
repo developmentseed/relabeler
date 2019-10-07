@@ -1,9 +1,10 @@
-import { colors } from './../utils/colors';
+import { colors } from '../utils/colors';
 
 export const FETCH_DATA_BEGIN = 'FETCH_DATA_BEGIN';
 export const FETCH_DATA_SUCCESS = 'FETCH_DATA_SUCCESS';
 export const FETCH_DATA_FAILURE = 'FETCH_DATA_FAILURE';
 export const SET_LABEL = 'SET_LABEL';
+export const UPDATE_DATA = 'UPDATE_DATA';
 
 export const fetchDataBegin = () => ({
   type: FETCH_DATA_BEGIN
@@ -25,6 +26,13 @@ export const setLabel = label => ({
   type: SET_LABEL,
   payload: { label }
 });
+
+export const updateData = fData => {
+  return {
+    type: UPDATE_DATA,
+    payload: { fData }
+  };
+};
 
 export function fetchData(files) {
   return dispatch => {

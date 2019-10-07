@@ -8,8 +8,8 @@ import flatten from 'lodash.flatten';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { colors } from './../utils/colors';
-
 import MapLoadingProgress from './MapLoadingProgress';
+
 const accessToken = 'pk.eyJ1IjoiZGV2c2VlZCIsImEiOiJnUi1mbkVvIn0.018aLhX0Mb0tdtaT2QNe2Q'; // process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 
 class Map extends Component {
@@ -41,9 +41,9 @@ class Map extends Component {
     map.on('load', () => {
       map.on('click', 'labels', this.onLabelClick);
     });
-    map.on('mousemove', function(e) {
-      map.getCanvas().style.cursor = e ? 'pointer' : '';
-    });
+    // map.on('mouseover','labels', function(e) {
+    //   map.getCanvas().style.cursor = e ? 'pointer' : '';
+    // });
     this.map = map;
   }
 
@@ -58,33 +58,37 @@ class Map extends Component {
       }
       return f;
     });
+    // this.props.dispatch(updateData(data));
     this.map.getSource('labels').setData(data);
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.data) {
-      this.initLabels(nextProps.data, nextProps.currentlabel);
+    if (nextProps.data && nextProps.currentlabel) {
+      this.initLabels(nextProps.data, nextProps.currentlabel, nextProps.opacity);
     }
   }
 
-  initLabels(data, currentlabel) {
+  initLabels(data, currentlabel, opacity) {
     const filters = [
       ['==', ['number', ['at', currentlabel.id, ['array', ['get', 'label']]]], 1],
       currentlabel.color
     ];
     const fillColors = ['case'].concat(filters).concat(['black']);
-    const paintLayer = {
-      id: 'labels',
-      source: 'labels',
-      type: 'fill',
-      paint: {
-        'fill-color': fillColors,
-        'fill-outline-color': 'white',
-        'fill-opacity': 0.5
-      }
-    };
 
+    /**
+     * Load the layer for first time
+     */
     if (!this.map.getSource('labels')) {
+      const paintLayer = {
+        id: 'labels',
+        source: 'labels',
+        type: 'fill',
+        paint: {
+          'fill-color': fillColors,
+          'fill-outline-color': 'white',
+          'fill-opacity': opacity / 100
+        }
+      };
       /**
        * Set label
        */
@@ -99,10 +103,12 @@ class Map extends Component {
       const box = bbox(data);
       // zoom to the data
       this.map.fitBounds([[box[0], box[1]], [box[2], box[3]]]);
+      this.map.addLayer(paintLayer);
     } else {
-      this.map.removeLayer('labels');
+      // this.map.removeLayer('labels');
+      this.map.setPaintProperty('labels', 'fill-color', fillColors);
+      this.map.setPaintProperty('labels', 'fill-opacity', opacity / 100);
     }
-    this.map.addLayer(paintLayer);
   }
   render() {
     const { loading } = this.state;
@@ -128,7 +134,8 @@ const mapStateToProps = state => ({
   loading: state.geojsonData.loading,
   error: state.geojsonData.error,
   labels: state.geojsonData.labels,
-  currentlabel: state.geojsonData.label
+  currentlabel: state.geojsonData.label,
+  opacity: state.control.opacity
 });
 
 export default connect(mapStateToProps)(Map);

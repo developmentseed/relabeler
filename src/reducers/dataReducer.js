@@ -2,8 +2,9 @@ import {
   FETCH_DATA_BEGIN,
   FETCH_DATA_SUCCESS,
   FETCH_DATA_FAILURE,
-  SET_LABEL
-} from '../actions/fetchDataActions';
+  SET_LABEL,
+  UPDATE_DATA
+} from '../actions/dataActions';
 
 const initialState = {
   data: {},
@@ -39,6 +40,11 @@ export default function dataReducer(state = initialState, action) {
       return {
         ...state,
         label: action.payload.label
+      };
+    case UPDATE_DATA:
+      return {
+        ...state,
+        data: action.payload.fData
       };
     default:
       return state;
