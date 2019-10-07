@@ -41,25 +41,27 @@ class Map extends Component {
     map.on('load', () => {
       map.on('click', 'labels', this.onLabelClick);
     });
-
+    map.on('mousemove', function(e) {
+      map.getCanvas().style.cursor = e ? 'pointer' : '';
+    });
     this.map = map;
   }
 
   onLabelClick(event) {
     // shift the label by one
     const feature = event.features[0];
-    const status = feature.properties.status || 'no';
-    const newStatus = status == 'no' ? 'yes' : 'no';
-    let tile = this.props.data.features.find(f => f.properties.tile === feature.properties.tile);
-
-    tile.properties.status = newStatus;
-    this.map.getSource('labels').setData(this.props.data);
+    const clase = this.props.currentlabel;
+    let data = this.props.data;
+    data.features = this.props.data.features.map(f => {
+      if (f.properties.index === feature.properties.index) {
+        f.properties.label[clase.id] = f.properties.label[clase.id] ? 0 : 1;
+      }
+      return f;
+    });
+    this.map.getSource('labels').setData(data);
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('------------------------------------');
-    console.log(nextProps.currentlabel);
-    console.log('------------------------------------');
     if (nextProps.data) {
       this.initLabels(nextProps.data, nextProps.currentlabel);
     }
@@ -83,17 +85,24 @@ class Map extends Component {
     };
 
     if (!this.map.getSource('labels')) {
+      /**
+       * Set label
+       */
+      data.features = data.features.map((f, i) => {
+        f.properties.index = i;
+        return f;
+      });
       this.map.addSource('labels', {
         type: 'geojson',
         data: data
       });
+      const box = bbox(data);
+      // zoom to the data
+      this.map.fitBounds([[box[0], box[1]], [box[2], box[3]]]);
     } else {
       this.map.removeLayer('labels');
     }
     this.map.addLayer(paintLayer);
-    const box = bbox(data);
-    // zoom to the data
-    this.map.fitBounds([[box[0], box[1]], [box[2], box[3]]]);
   }
   render() {
     const { loading } = this.state;

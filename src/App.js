@@ -3,7 +3,7 @@ import 'typeface-roboto'; // eslint-disable-line
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import bbox from '@turf/bbox';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 import Map from './components/Map';
 import Header from './components/Header';
@@ -23,6 +23,7 @@ class App extends Component {
     const { classes, sliderValue } = this.props;
     return (
       <div className={classes.root}>
+        <CssBaseline />
         <Header />
         <Grid container spacing={0} className={classes.mainContainer}>
           <Control
