@@ -114,7 +114,10 @@ class Map extends Component {
     const { loading } = this.state;
     const style = {
       position: 'absolute',
-      top: 64,
+      top: 0,
+      rigt: 0,
+      left: 0,
+      zIndex: 99,
       bottom: 0,
       width: '100%',
       overflow: 'hidden'

@@ -12,35 +12,20 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 import { setLabel } from '../actions/dataActions';
 import Divider from '@material-ui/core/Divider';
-
 import Loadfile from './Loadfile';
 import Slider from './Slider';
 const styles = theme => ({
-  card: {
-    display: 'absolute',
-    minWidth: 200,
-    zIndex: 99,
-    // top:10
-    marginLeft: 5,
-    marginTop: 5
-  },
-  bullet: {
-    display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)'
-  },
   title: {
-    fontSize: 14
-  },
-  pos: {
-    marginBottom: 12
+    fontSize: 12,
+    alignItems: 'center',
+    marginTop: '5px'
   },
   legendSpan: {
     display: 'block',
-    height: '20px',
-    width: '30px',
+    height: '25px',
+    width: '40px',
     textAlign: 'center',
-    fontSize: '9px',
+    alignItems: 'center',
     color: '#808080'
   }
 });
@@ -53,48 +38,43 @@ class Sidebar extends Component {
   render() {
     const { classes, labels, currentlabel } = this.props;
     return (
-      <Card className={classes.card}>
-        <CardContent>
-          <Typography variant="body2" component="p">
-            {'Classes'}
-          </Typography>
-          <MenuList>
-            {labels.map((label, id) => {
-              return (
-                <div>
-                  <MenuItem
-                    selected={label.id === currentlabel.id}
-                    key={id}
-                    onClick={() => {
-                      this.choseLabel(label, id);
-                    }}
-                    style={{ paddingBottom: '2px', paddingTop: '2px' }}
-                  >
-                    <Grid item xs={12}>
-                      <Grid container justify="center">
-                        <Grid item xs={6}>
-                          <Typography className={classes.title} color="textSecondary" gutterBottom>
-                            {label.class}
-                          </Typography>
-                        </Grid>
-                        <Grid key={id} item xs={6}>
-                          <span
-                            style={{ background: label.color }}
-                            className={classes.legendSpan}
-                          ></span>
-                        </Grid>
+      <div>
+        <MenuList>
+          {labels.map((label, id) => {
+            return (
+              <div>
+                <MenuItem
+                  selected={label.id === currentlabel.id}
+                  key={id}
+                  onClick={() => {
+                    this.choseLabel(label, id);
+                  }}
+                  style={{ paddingBottom: '2px', paddingTop: '2px' }}
+                >
+                  <Grid item xs={12}>
+                    <Grid container justify="center">
+                      <Grid item xs={6}>
+                        <Typography className={classes.title} color="textSecondary" gutterBottom>
+                          {label.class}
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <span
+                          style={{ background: label.color }}
+                          className={classes.legendSpan}
+                        ></span>
                       </Grid>
                     </Grid>
-                  </MenuItem>
-                  <Divider />
-                </div>
-              );
-            })}
-          </MenuList>
-        </CardContent>
+                  </Grid>
+                </MenuItem>
+                <Divider />
+              </div>
+            );
+          })}
+        </MenuList>
         <CardActions>{labels.length > 0 ? <Slider /> : null}</CardActions>
         {labels.length === 0 ? <Loadfile /> : null}
-      </Card>
+      </div>
     );
   }
 }

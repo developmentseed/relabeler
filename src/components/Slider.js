@@ -51,12 +51,19 @@ class SliderComponent extends Component {
   render() {
     const { opacity } = this.props;
     return (
-      <Slider
-        ValueLabelComponent={ValueLabelComponent}
-        aria-label="custom thumb label"
-        defaultValue={opacity}
-        onChange={this.changeOpacityControl}
-      />
+      <div style={{ width: '210px', margin: '5px' }}>
+        <Typography variant="caption" display="block" gutterBottom>
+          Label opacity
+        </Typography>
+        <Paper style={{ padding: '3px' }}>
+          <Slider
+            ValueLabelComponent={ValueLabelComponent}
+            aria-label="label"
+            defaultValue={opacity}
+            onChange={this.changeOpacityControl}
+          />
+        </Paper>
+      </div>
     );
   }
 }

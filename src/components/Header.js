@@ -1,50 +1,55 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import clsx from 'clsx';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
+
+import Drawer from '@material-ui/core/Drawer';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
+import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import InboxIcon from '@material-ui/icons/MoveToInbox';
+import MailIcon from '@material-ui/icons/Mail';
+import styles from '../style/HomeStyles';
 
-const styles = theme => ({
-  root: {
-    flexGrow: 1
-  },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1
-  },
-  sidebar: {
-    color: theme.palette.text.secondary,
-    display: 'flex',
-    flexFlow: 'column',
-    height: '100%'
-  },
-  title: {
-    color: '#fff'
-  },
-  toolbar: {
-    background: '#534e4e'
-  }
-});
-
-export const Header = props => {
-  const { classes } = props;
-  return (
-    <AppBar position="static">
-      <Toolbar className={classes.toolbar}>
-        <Typography variant="h5" className={classes.title}>
-          Relabeler
-          <Typography variant="caption" className={classes.title}>
-            Updating Machine Learning Labels
+class Header extends Component {
+  render() {
+    const { classes, open, handleDrawerOpen } = this.props;
+    return (
+      <AppBar
+        position="fixed"
+        className={clsx(classes.appBar, {
+          [classes.appBarShift]: open
+        })}
+      >
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            edge="start"
+            className={clsx(classes.menuButton, open && classes.hide)}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" noWrap>
+            Relabeler
           </Typography>
-        </Typography>
-      </Toolbar>
-    </AppBar>
-  );
-};
-
-Header.propTypes = {
-  classes: PropTypes.object.isRequired
-};
+        </Toolbar>
+      </AppBar>
+    );
+  }
+}
 
 export default withStyles(styles)(Header);

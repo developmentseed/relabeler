@@ -4,40 +4,33 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import { createMuiTheme } from '@material-ui/core/styles';
+import amber from '@material-ui/core/colors/amber';
+import red from '@material-ui/core/colors/red';
+import { ThemeProvider } from '@material-ui/styles';
 
-import Map from './components/Map';
-import Header from './components/Header';
-import Sidebar from './components/Sidebar';
+import Home from './components/Home';
 
-const styles = theme => ({
-  root: {
-    flexGrow: 1
-  },
-  mainContainer: {
-    height: 'calc(100vh - 64px)'
+const theme = createMuiTheme({
+  palette: {
+    primary: amber,
+    secondary: {
+      light: '#0066ff',
+      main: '#0044ff',
+      contrastText: '#ffcc00'
+    }
   }
 });
 
 class App extends Component {
   render() {
-    const { classes, sliderValue } = this.props;
     return (
-      <div className={classes.root}>
+      <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Header />
-        <Grid container spacing={0} className={classes.mainContainer}>
-          <Sidebar />
-          <Grid item xs={12} sm={12}>
-            <Map />
-          </Grid>
-        </Grid>
-      </div>
+        <Home></Home>
+      </ThemeProvider>
     );
   }
 }
 
-App.propTypes = {
-  classes: PropTypes.object.isRequired
-};
-
-export default withStyles(styles)(App);
+export default App;
