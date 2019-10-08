@@ -14,11 +14,7 @@ import Home from './components/Home';
 const theme = createMuiTheme({
   palette: {
     primary: amber,
-    secondary: {
-      light: '#0066ff',
-      main: '#0044ff',
-      contrastText: '#ffcc00'
-    }
+    secondary: red
   }
 });
 

@@ -74,6 +74,10 @@ class Sidebar extends Component {
         </MenuList>
         <CardActions>{labels.length > 0 ? <Slider /> : null}</CardActions>
         {labels.length === 0 ? <Loadfile /> : null}
+
+        <div style={{ margin: '10px' }}>
+          <Button variant="outlined">Download</Button>
+        </div>
       </div>
     );
   }

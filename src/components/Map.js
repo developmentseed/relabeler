@@ -55,6 +55,7 @@ class Map extends Component {
     data.features = this.props.data.features.map(f => {
       if (f.properties.index === feature.properties.index) {
         f.properties.label[clase.id] = f.properties.label[clase.id] ? 0 : 1;
+        f.properties.status = !f.properties.status || f.properties.status === 'no' ? 'yes' : 'no';
       }
       return f;
     });
@@ -85,10 +86,21 @@ class Map extends Component {
         type: 'fill',
         paint: {
           'fill-color': fillColors,
-          'fill-outline-color': 'white',
+          // 'fill-outline-color': ,
           'fill-opacity': opacity / 100
         }
       };
+
+      const lineLayer = {
+        id: 'labels-line',
+        source: 'labels',
+        type: 'line',
+        paint: {
+          'line-width': ['match', ['get', 'status'], 'no', 2, 'yes', 2, 1],
+          'line-color': ['match', ['get', 'status'], 'no', '#e77cff', 'yes', '#e77cff', 'white']
+        }
+      };
+
       /**
        * Set label
        */
@@ -104,10 +116,14 @@ class Map extends Component {
       // zoom to the data
       this.map.fitBounds([[box[0], box[1]], [box[2], box[3]]]);
       this.map.addLayer(paintLayer);
+      this.map.addLayer(lineLayer);
     } else {
       // this.map.removeLayer('labels');
       this.map.setPaintProperty('labels', 'fill-color', fillColors);
       this.map.setPaintProperty('labels', 'fill-opacity', opacity / 100);
+      this.map.setPaintProperty('labels-line', 'line-opacity', opacity / 100);
+
+      // 'fill-outline-color': 'rgba(200, 100, 240, 1)'
     }
   }
   render() {
