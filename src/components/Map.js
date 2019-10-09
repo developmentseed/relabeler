@@ -1,14 +1,8 @@
 import React, { Component } from 'react';
-// import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
 import mapboxgl from 'mapbox-gl';
 import bbox from '@turf/bbox';
-import flatten from 'lodash.flatten';
 import { saveAs } from 'file-saver';
-
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { colors } from './../utils/colors';
 import MapLoadingProgress from './MapLoadingProgress';
 import { downloadGeojsonFile } from '../actions/controlAction';
 
@@ -32,7 +26,6 @@ class Map extends Component {
     };
     this.hoverId = 0;
     const map = new mapboxgl.Map(mapConfig);
-    // this.draw = addDrawControl(map, drawingCompleted);
     map.on('load', () => {});
     const onMapRender = e => {
       if (e.target && e.target.loaded()) {
@@ -62,7 +55,6 @@ class Map extends Component {
       }
       return f;
     });
-    // this.props.dispatch(updateData(data));
     this.map.getSource('labels').setData(data);
   }
 
@@ -105,7 +97,6 @@ class Map extends Component {
         type: 'fill',
         paint: {
           'fill-color': fillColors,
-          // 'fill-outline-color': ,
           'fill-opacity': opacity / 100
         }
       };
@@ -138,12 +129,9 @@ class Map extends Component {
       this.map.addLayer(paintLayer);
       this.map.addLayer(lineLayer);
     } else {
-      // this.map.removeLayer('labels');
       this.map.setPaintProperty('labels', 'fill-color', fillColors);
       this.map.setPaintProperty('labels', 'fill-opacity', opacity / 100);
       this.map.setPaintProperty('labels-line', 'line-opacity', opacity / 100);
-
-      // 'fill-outline-color': 'rgba(200, 100, 240, 1)'
     }
   }
   render() {
