@@ -12,6 +12,7 @@ import { setLabel } from '../actions/dataActions';
 import { downloadGeojsonFile } from '../actions/controlAction';
 import Divider from '@material-ui/core/Divider';
 import ContentEditable from 'react-contenteditable';
+import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 
 import Loadfile from './Loadfile';
 import Slider from './Slider';
@@ -99,6 +100,19 @@ class Sidebar extends Component {
             </div>
           ) : null}
         </CardActions>
+        <Divider />
+        <Typography className={classes.title} color="textSecondary" gutterBottom>
+          {'TMS layer'}
+        </Typography>
+        <TextareaAutosize
+          style={{ margin: '3px', width: '234px', height: '120px' }}
+          defaultValue=""
+        ></TextareaAutosize>
+        <div style={{ margin: '3px' }}>
+          <Button variant="outlined" style={{ width: '234px' }}>
+            Set TMS Layer
+          </Button>
+        </div>
       </div>
     );
   }

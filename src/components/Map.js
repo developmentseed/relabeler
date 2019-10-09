@@ -6,7 +6,9 @@ import { connect } from 'react-redux';
 import MapLoadingProgress from './MapLoadingProgress';
 import { downloadGeojsonFile } from '../actions/controlAction';
 
-const accessToken = 'pk.eyJ1IjoiZGV2c2VlZCIsImEiOiJnUi1mbkVvIn0.018aLhX0Mb0tdtaT2QNe2Q'; // process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
+import config from './../config.json';
+
+const accessToken = ''; // process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 
 class Map extends Component {
   constructor(props) {
@@ -16,10 +18,10 @@ class Map extends Component {
     this.save = this.save.bind(this);
   }
   componentDidMount() {
-    mapboxgl.accessToken = accessToken;
+    mapboxgl.accessToken = config.accessToken;
     const mapConfig = {
       container: this.node,
-      style: 'mapbox://styles/mapbox/satellite-v9',
+      style: config.style,
       center: [-103.59179687498357, 40.66995747013945],
       zoom: 3,
       attributionControl: true
