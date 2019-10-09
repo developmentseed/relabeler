@@ -13,6 +13,8 @@ import MenuList from '@material-ui/core/MenuList';
 import { setLabel } from '../actions/dataActions';
 import { downloadGeojsonFile } from '../actions/controlAction';
 import Divider from '@material-ui/core/Divider';
+import ContentEditable from 'react-contenteditable';
+
 import Loadfile from './Loadfile';
 import Slider from './Slider';
 const styles = theme => ({
@@ -24,7 +26,7 @@ const styles = theme => ({
   legendSpan: {
     display: 'block',
     height: '25px',
-    width: '40px',
+    width: '60px',
     textAlign: 'center',
     alignItems: 'center',
     color: '#808080'
@@ -32,6 +34,11 @@ const styles = theme => ({
 });
 
 class Sidebar extends Component {
+  constructor() {
+    super();
+    this.contentEditable = React.createRef();
+  }
+
   choseLabel = (label, id) => {
     this.props.dispatch(setLabel(label));
   };
@@ -39,6 +46,7 @@ class Sidebar extends Component {
   downloadFile = () => {
     this.props.dispatch(downloadGeojsonFile(true));
   };
+
   render() {
     const { classes, labels, currentlabel } = this.props;
     return (
@@ -57,14 +65,19 @@ class Sidebar extends Component {
                 >
                   <Grid item xs={12}>
                     <Grid container justify="center">
-                      <Grid item xs={6}>
+                      <Grid item xs={8}>
                         <Typography className={classes.title} color="textSecondary" gutterBottom>
-                          {label.class}
+                          {/* {label.class} */}
+                          <ContentEditable
+                            innerRef={this.contentEditable}
+                            html={label.class}
+                            disabled={false}
+                          ></ContentEditable>
                         </Typography>
                       </Grid>
-                      <Grid item xs={6}>
+                      <Grid item xs={4}>
                         <span
-                          style={{ background: label.color }}
+                          style={{ background: label.color, marginLeft: '5px' }}
                           className={classes.legendSpan}
                         ></span>
                       </Grid>
