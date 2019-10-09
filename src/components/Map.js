@@ -4,11 +4,13 @@ import { bindActionCreators } from 'redux';
 import mapboxgl from 'mapbox-gl';
 import bbox from '@turf/bbox';
 import flatten from 'lodash.flatten';
+import { saveAs } from 'file-saver';
 
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { colors } from './../utils/colors';
 import MapLoadingProgress from './MapLoadingProgress';
+import { downloadGeojsonFile } from '../actions/controlAction';
 
 const accessToken = 'pk.eyJ1IjoiZGV2c2VlZCIsImEiOiJnUi1mbkVvIn0.018aLhX0Mb0tdtaT2QNe2Q'; // process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 
@@ -17,6 +19,7 @@ class Map extends Component {
     super(props);
     this.state = { loading: true };
     this.onLabelClick = this.onLabelClick.bind(this);
+    this.save = this.save.bind(this);
   }
   componentDidMount() {
     mapboxgl.accessToken = accessToken;
@@ -41,9 +44,9 @@ class Map extends Component {
     map.on('load', () => {
       map.on('click', 'labels', this.onLabelClick);
     });
-    // map.on('mouseover','labels', function(e) {
-    //   map.getCanvas().style.cursor = e ? 'pointer' : '';
-    // });
+    map.on('mouseover', 'labels', function(e) {
+      map.getCanvas().style.cursor = e ? 'pointer' : '';
+    });
     this.map = map;
   }
 
@@ -67,6 +70,22 @@ class Map extends Component {
     if (nextProps.data && nextProps.currentlabel) {
       this.initLabels(nextProps.data, nextProps.currentlabel, nextProps.opacity);
     }
+
+    //Download geojso file
+    if (nextProps.downloadFile) {
+      this.save();
+      this.props.dispatch(downloadGeojsonFile(false));
+    }
+  }
+
+  save() {
+    const data = this.map.getSource('labels')._data;
+    data.features = data.features.map(feature => {
+      delete feature.properties.status;
+      return feature;
+    });
+    const blob = new Blob([JSON.stringify(data)], { type: 'application/json;charset=utf-8' });
+    saveAs(blob, 'labels.geojson');
   }
 
   initLabels(data, currentlabel, opacity) {
@@ -97,7 +116,8 @@ class Map extends Component {
         type: 'line',
         paint: {
           'line-width': ['match', ['get', 'status'], 'no', 2, 'yes', 2, 1],
-          'line-color': ['match', ['get', 'status'], 'no', '#e77cff', 'yes', '#e77cff', 'white']
+          'line-color': ['match', ['get', 'status'], 'no', '#e77cff', 'yes', '#e77cff', 'white'],
+          'line-opacity': opacity / 100
         }
       };
 
@@ -154,7 +174,8 @@ const mapStateToProps = state => ({
   error: state.geojsonData.error,
   labels: state.geojsonData.labels,
   currentlabel: state.geojsonData.label,
-  opacity: state.control.opacity
+  opacity: state.control.opacity,
+  downloadFile: state.control.downloadFile
 });
 
 export default connect(mapStateToProps)(Map);

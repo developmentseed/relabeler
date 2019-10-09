@@ -11,6 +11,7 @@ import Grid from '@material-ui/core/Grid';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 import { setLabel } from '../actions/dataActions';
+import { downloadGeojsonFile } from '../actions/controlAction';
 import Divider from '@material-ui/core/Divider';
 import Loadfile from './Loadfile';
 import Slider from './Slider';
@@ -35,6 +36,9 @@ class Sidebar extends Component {
     this.props.dispatch(setLabel(label));
   };
 
+  downloadFile = () => {
+    this.props.dispatch(downloadGeojsonFile(true));
+  };
   render() {
     const { classes, labels, currentlabel } = this.props;
     return (
@@ -72,12 +76,19 @@ class Sidebar extends Component {
             );
           })}
         </MenuList>
-        <CardActions>{labels.length > 0 ? <Slider /> : null}</CardActions>
         {labels.length === 0 ? <Loadfile /> : null}
-
-        <div style={{ margin: '10px' }}>
-          <Button variant="outlined">Download</Button>
-        </div>
+        <CardActions>
+          {labels.length > 0 ? (
+            <div>
+              <Slider />
+              <div style={{ margin: '3px' }}>
+                <Button variant="outlined" onClick={this.downloadFile}>
+                  Download
+                </Button>
+              </div>
+            </div>
+          ) : null}
+        </CardActions>
       </div>
     );
   }
