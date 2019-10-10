@@ -5,11 +5,7 @@ import { saveAs } from 'file-saver';
 import { connect } from 'react-redux';
 import MapLoadingProgress from './MapLoadingProgress';
 import { downloadGeojsonFile } from '../actions/controlAction';
-
 import config from './../config.json';
-
-const accessToken = ''; // process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
-
 class Map extends Component {
   constructor(props) {
     super(props);
@@ -18,17 +14,34 @@ class Map extends Component {
     this.save = this.save.bind(this);
   }
   componentDidMount() {
-    mapboxgl.accessToken = config.accessToken;
+    const styleTMS = {
+      version: 8,
+      sources: {
+        'raster-tiles': {
+          type: 'raster',
+          tiles: config.layers,
+          tileSize: 256
+        }
+      },
+      layers: [
+        {
+          id: 'simple-tiles',
+          type: 'raster',
+          source: 'raster-tiles',
+          minzoom: 0,
+          maxzoom: 22
+        }
+      ]
+    };
     const mapConfig = {
       container: this.node,
-      style: config.style,
-      center: [-103.59179687498357, 40.66995747013945],
-      zoom: 3,
+      style: styleTMS,
+      center: [0, 0],
+      zoom: 0,
       attributionControl: true
     };
     this.hoverId = 0;
     const map = new mapboxgl.Map(mapConfig);
-    map.on('load', () => {});
     const onMapRender = e => {
       if (e.target && e.target.loaded()) {
         this.setState({ loading: false });
@@ -74,10 +87,6 @@ class Map extends Component {
 
   save() {
     const data = this.map.getSource('labels')._data;
-    data.features = data.features.map(feature => {
-      delete feature.properties.status;
-      return feature;
-    });
     const blob = new Blob([JSON.stringify(data)], { type: 'application/json;charset=utf-8' });
     saveAs(blob, 'labels.geojson');
   }

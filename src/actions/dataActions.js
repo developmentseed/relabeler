@@ -55,6 +55,28 @@ export function fetchData(files) {
   };
 }
 
+export function fetchDataURL(url) {
+  return dispatch => {
+    dispatch(fetchDataBegin());
+    return fetch(url)
+      .then(handleErrors)
+      .then(res => res.json())
+      .then(json => {
+        //Get labels from the source
+        const labels = json.features[0].properties.label.map((lab, i) => {
+          return {
+            id: i,
+            class: `Class ${i + 1}`,
+            color: colors[i % 10]
+          };
+        });
+        dispatch(fetchDataSuccess(json, labels, labels[0]));
+        return json;
+      })
+      .catch(error => dispatch(fetchDataFailure(error)));
+  };
+}
+
 // Handle HTTP errors since fetch won't.
 function handleErrors(response) {
   if (!response.ok) {

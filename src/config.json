@@ -1,4 +1,51 @@
 {
-    "style": "mapbox://styles/mapbox/satellite-v9",
-    "accessToken":"pk.eyJ1IjoiZGV2c2VlZCIsImEiOiJnUi1mbkVvIn0.018aLhX0Mb0tdtaT2QNe2Q"
+    "layers": [
+        "https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.jpg?access_token=pk.eyJ1IjoiZGV2c2VlZCIsImEiOiJnUi1mbkVvIn0.018aLhX0Mb0tdtaT2QNe2Q"
+    ],
+    "classes": [
+        {
+            "name": "background",
+            "mbxLayer": null
+        },
+        {
+            "name": "hospital",
+            "mbxLayer": null
+        },
+        {
+            "name": "university",
+            "mbxLayer": null
+        },
+        {
+            "name": "school",
+            "mbxLayer": null
+        },
+        {
+            "name": "place_of_worship",
+            "mbxLayer": null
+        },
+        {
+            "name": "government",
+            "mbxLayer": null
+        },
+        {
+            "name": "transportation",
+            "mbxLayer": null
+        },
+        {
+            "name": "commercial",
+            "mbxLayer": null
+        },
+        {
+            "name": "industry",
+            "mbxLayer": null
+        },
+        {
+            "name": "sports",
+            "mbxLayer": null
+        },
+        {
+            "name": "residential",
+            "mbxLayer": null
+        }
+    ]
 }

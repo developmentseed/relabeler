@@ -112,3 +112,4 @@ tmp
 dist
 *.geojson
 *.npz
+build/

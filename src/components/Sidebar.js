@@ -11,11 +11,10 @@ import MenuList from '@material-ui/core/MenuList';
 import { setLabel } from '../actions/dataActions';
 import { downloadGeojsonFile } from '../actions/controlAction';
 import Divider from '@material-ui/core/Divider';
-import ContentEditable from 'react-contenteditable';
-import TextareaAutosize from '@material-ui/core/TextareaAutosize';
-
+import config from './../config.json';
 import Loadfile from './Loadfile';
 import Slider from './Slider';
+
 const styles = theme => ({
   title: {
     fontSize: 12,
@@ -53,10 +52,9 @@ class Sidebar extends Component {
         <MenuList>
           {labels.map((label, id) => {
             return (
-              <div>
+              <div key={id}>
                 <MenuItem
                   selected={label.id === currentlabel.id}
-                  key={id}
                   onClick={() => {
                     this.choseLabel(label, id);
                   }}
@@ -66,11 +64,7 @@ class Sidebar extends Component {
                     <Grid container justify="center">
                       <Grid item xs={8}>
                         <Typography className={classes.title} color="textSecondary" gutterBottom>
-                          <ContentEditable
-                            innerRef={this.contentEditable}
-                            html={label.class}
-                            disabled={false}
-                          ></ContentEditable>
+                          {config.classes[id].name || label.class}
                         </Typography>
                       </Grid>
                       <Grid item xs={4}>
@@ -101,7 +95,7 @@ class Sidebar extends Component {
           ) : null}
         </CardActions>
         <Divider />
-        <Typography className={classes.title} color="textSecondary" gutterBottom>
+        {/* <Typography className={classes.title} color="textSecondary" gutterBottom>
           {'TMS layer'}
         </Typography>
         <TextareaAutosize
@@ -112,7 +106,7 @@ class Sidebar extends Component {
           <Button variant="outlined" style={{ width: '234px' }}>
             Set TMS Layer
           </Button>
-        </div>
+        </div> */}
       </div>
     );
   }
