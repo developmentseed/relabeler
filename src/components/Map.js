@@ -12,8 +12,10 @@ class Map extends Component {
     this.state = { loading: true };
     this.onLabelClick = this.onLabelClick.bind(this);
     this.save = this.save.bind(this);
+    this.loadExtraStyles = this.loadExtraStyles.bind(this);
   }
   componentDidMount() {
+    // mapboxgl.accessToken = config.accessToken;
     const styleTMS = {
       version: 8,
       sources: {
@@ -25,7 +27,7 @@ class Map extends Component {
       },
       layers: [
         {
-          id: 'simple-tiles',
+          id: 'tmsLayer',
           type: 'raster',
           source: 'raster-tiles',
           minzoom: 0,
@@ -51,6 +53,7 @@ class Map extends Component {
     map.on('render', this.onMapRender);
     map.on('load', () => {
       map.on('click', 'labels', this.onLabelClick);
+      this.loadExtraStyles();
     });
     map.on('mouseover', 'labels', function(e) {
       map.getCanvas().style.cursor = e ? 'pointer' : '';
@@ -91,6 +94,23 @@ class Map extends Component {
     saveAs(blob, 'labels.geojson');
   }
 
+  loadExtraStyles() {
+    config.classes.forEach(c => {
+      if (c.layers.length > 0) {
+        this.map.addLayer({
+          id: c.name,
+          type: 'raster',
+          source: {
+            type: 'raster',
+            tiles: c.layers,
+            minzoom: 0,
+            maxzoom: 22
+          }
+        });
+        this.map.setLayoutProperty(c.name, 'visibility', 'none');
+      }
+    });
+  }
   initLabels(data, currentlabel, opacity) {
     const filters = [
       ['==', ['number', ['at', currentlabel.id, ['array', ['get', 'label']]]], 1],
@@ -143,6 +163,16 @@ class Map extends Component {
       this.map.setPaintProperty('labels', 'fill-color', fillColors);
       this.map.setPaintProperty('labels', 'fill-opacity', opacity / 100);
       this.map.setPaintProperty('labels-line', 'line-opacity', opacity / 100);
+      //show and hide layers
+      config.classes.forEach((c, i) => {
+        const layerName = c.name;
+        if (this.map.getLayer(layerName)) {
+          this.map.setLayoutProperty(layerName, 'visibility', 'none');
+          if (currentlabel.id === i) {
+            this.map.setLayoutProperty(layerName, 'visibility', 'visible');
+          }
+        }
+      });
     }
   }
   render() {

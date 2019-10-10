@@ -5,47 +5,49 @@
     "classes": [
         {
             "name": "background",
-            "mbxLayer": null
+            "layers": []
         },
         {
             "name": "hospital",
-            "mbxLayer": null
+            "layers": []
         },
         {
             "name": "university",
-            "mbxLayer": null
+            "layers": []
         },
         {
             "name": "school",
-            "mbxLayer": null
+            "layers": [
+                "https://a.tiles.mapbox.com/styles/v1/devseed/ck1kthmph0c831clkebqdv1a6/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGV2c2VlZCIsImEiOiJnUi1mbkVvIn0.018aLhX0Mb0tdtaT2QNe2Q"
+            ]
         },
         {
             "name": "place_of_worship",
-            "mbxLayer": null
+            "layers": []
         },
         {
             "name": "government",
-            "mbxLayer": null
+            "layers": []
         },
         {
             "name": "transportation",
-            "mbxLayer": null
+            "layers": []
         },
         {
             "name": "commercial",
-            "mbxLayer": null
+            "layers": []
         },
         {
             "name": "industry",
-            "mbxLayer": null
+            "layers": []
         },
         {
             "name": "sports",
-            "mbxLayer": null
+            "layers": []
         },
         {
             "name": "residential",
-            "mbxLayer": null
+            "layers": []
         }
     ]
 }
