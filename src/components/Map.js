@@ -7,14 +7,15 @@ import MapLoadingProgress from './MapLoadingProgress';
 import { downloadGeojsonFile } from '../actions/controlAction';
 import config from './../config.json';
 class Map extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = { loading: true };
     this.onLabelClick = this.onLabelClick.bind(this);
     this.save = this.save.bind(this);
     this.loadExtraStyles = this.loadExtraStyles.bind(this);
   }
-  componentDidMount() {
+
+  componentDidMount () {
     // mapboxgl.accessToken = config.accessToken;
     const styleTMS = {
       version: 8,
@@ -55,17 +56,17 @@ class Map extends Component {
       map.on('click', 'labels', this.onLabelClick);
       this.loadExtraStyles();
     });
-    map.on('mouseover', 'labels', function(e) {
+    map.on('mouseover', 'labels', function (e) {
       map.getCanvas().style.cursor = e ? 'pointer' : '';
     });
     this.map = map;
   }
 
-  onLabelClick(event) {
+  onLabelClick (event) {
     // shift the label by one
     const feature = event.features[0];
     const clase = this.props.currentlabel;
-    let data = this.props.data;
+    const data = this.props.data;
     data.features = this.props.data.features.map(f => {
       if (f.properties.index === feature.properties.index) {
         f.properties.label[clase.id] = f.properties.label[clase.id] ? 0 : 1;
@@ -76,25 +77,25 @@ class Map extends Component {
     this.map.getSource('labels').setData(data);
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps) {
     if (nextProps.data && nextProps.currentlabel) {
       this.initLabels(nextProps.data, nextProps.currentlabel, nextProps.opacity);
     }
 
-    //Download geojso file
+    // Download geojso file
     if (nextProps.downloadFile) {
       this.save();
       this.props.dispatch(downloadGeojsonFile(false));
     }
   }
 
-  save() {
+  save () {
     const data = this.map.getSource('labels')._data;
     const blob = new Blob([JSON.stringify(data)], { type: 'application/json;charset=utf-8' });
     saveAs(blob, 'labels.geojson');
   }
 
-  loadExtraStyles() {
+  loadExtraStyles () {
     config.classes.forEach(c => {
       if (c.layers.length > 0) {
         this.map.addLayer({
@@ -111,7 +112,8 @@ class Map extends Component {
       }
     });
   }
-  initLabels(data, currentlabel, opacity) {
+
+  initLabels (data, currentlabel, opacity) {
     const filters = [
       ['==', ['number', ['at', currentlabel.id, ['array', ['get', 'label']]]], 1],
       currentlabel.color
@@ -163,7 +165,7 @@ class Map extends Component {
       this.map.setPaintProperty('labels', 'fill-color', fillColors);
       this.map.setPaintProperty('labels', 'fill-opacity', opacity / 100);
       this.map.setPaintProperty('labels-line', 'line-opacity', opacity / 100);
-      //show and hide layers
+      // show and hide layers
       config.classes.forEach((c, i) => {
         const layerName = c.name;
         if (this.map.getLayer(layerName)) {
@@ -175,7 +177,8 @@ class Map extends Component {
       });
     }
   }
-  render() {
+
+  render () {
     const { loading } = this.state;
     const style = {
       position: 'absolute',
@@ -190,7 +193,7 @@ class Map extends Component {
 
     return (
       <React.Fragment>
-        <div id="map" style={style} ref={c => (this.node = c)} />
+        <div id='map' style={style} ref={c => (this.node = c)} />
         <MapLoadingProgress loading={loading} />
       </React.Fragment>
     );

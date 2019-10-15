@@ -16,11 +16,11 @@ const theme = createMuiTheme({
 });
 
 class App extends Component {
-  render() {
+  render () {
     return (
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Home></Home>
+        <Home />
       </ThemeProvider>
     );
   }

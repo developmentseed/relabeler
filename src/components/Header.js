@@ -10,26 +10,26 @@ import MenuIcon from '@material-ui/icons/Menu';
 import styles from '../style/HomeStyles';
 
 class Header extends Component {
-  render() {
+  render () {
     const { classes, open, handleDrawerOpen } = this.props;
     return (
       <AppBar
-        position="fixed"
+        position='fixed'
         className={clsx(classes.appBar, {
           [classes.appBarShift]: open
         })}
       >
         <Toolbar>
           <IconButton
-            color="inherit"
-            aria-label="open drawer"
+            color='inherit'
+            aria-label='open drawer'
             onClick={handleDrawerOpen}
-            edge="start"
+            edge='start'
             className={clsx(classes.menuButton, open && classes.hide)}
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap>
+          <Typography variant='h6' noWrap>
             Relabeler
           </Typography>
         </Toolbar>

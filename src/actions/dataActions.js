@@ -34,13 +34,13 @@ export const updateData = fData => {
   };
 };
 
-export function fetchData(files) {
+export function fetchData (files) {
   return dispatch => {
     dispatch(fetchDataBegin());
     const fileReader = new FileReader();
-    fileReader.onload = function(e) {
+    fileReader.onload = function (e) {
       const geojson = JSON.parse(fileReader.result);
-      //Get labels from the source
+      // Get labels from the source
       const labels = geojson.features[0].properties.label.map((lab, i) => {
         return {
           id: i,
@@ -55,14 +55,14 @@ export function fetchData(files) {
   };
 }
 
-export function fetchDataURL(url) {
+export function fetchDataURL (url) {
   return dispatch => {
     dispatch(fetchDataBegin());
     return fetch(url)
       .then(handleErrors)
       .then(res => res.json())
       .then(json => {
-        //Get labels from the source
+        // Get labels from the source
         const labels = json.features[0].properties.label.map((lab, i) => {
           return {
             id: i,
@@ -78,7 +78,7 @@ export function fetchDataURL(url) {
 }
 
 // Handle HTTP errors since fetch won't.
-function handleErrors(response) {
+function handleErrors (response) {
   if (!response.ok) {
     throw Error(response.statusText);
   }

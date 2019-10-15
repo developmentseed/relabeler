@@ -14,7 +14,7 @@ import Map from './Map';
 import Sidebar from './Sidebar';
 import { fetchDataURL } from './../actions/dataActions';
 class Home extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = { open: true };
     const url = window.location.href.split('?url=')[1];
@@ -28,7 +28,8 @@ class Home extends Component {
   handleDrawerClose = () => {
     this.setState({ open: false });
   };
-  render() {
+
+  render () {
     // const open =true;
     const { classes } = this.props;
     const { open } = this.state;
@@ -37,16 +38,16 @@ class Home extends Component {
         <Header handleDrawerOpen={this.handleDrawerOpen} open={open} />
         <Drawer
           className={classes.drawer}
-          variant="persistent"
-          anchor="left"
+          variant='persistent'
+          anchor='left'
           open={open}
           classes={{
             paper: classes.drawerPaper
           }}
         >
           <div className={classes.drawerHeader}>
-            <Typography gutterBottom component="h3">
-              {'Classes'}
+            <Typography gutterBottom component='h3'>
+              Classes
             </Typography>
             <IconButton onClick={this.handleDrawerClose}>
               <ChevronLeftIcon />

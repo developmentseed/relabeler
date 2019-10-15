@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
 import { changeOpacity } from './../actions/controlAction';
 
-function ValueLabelComponent(props) {
+function ValueLabelComponent (props) {
   const { children, open, value } = props;
   const popperRef = React.useRef(null);
   React.useEffect(() => {
@@ -23,7 +23,7 @@ function ValueLabelComponent(props) {
       }}
       open={open}
       enterTouchDelay={0}
-      placement="top"
+      placement='top'
       title={value}
     >
       {children}
@@ -38,25 +38,26 @@ ValueLabelComponent.propTypes = {
 };
 
 class SliderComponent extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.changeOpacityControl = this.changeOpacityControl.bind(this);
   }
-  changeOpacityControl(event, value) {
+
+  changeOpacityControl (event, value) {
     this.props.dispatch(changeOpacity(value));
   }
 
-  render() {
+  render () {
     const { opacity } = this.props;
     return (
       <div style={{ width: '210px', margin: '5px' }}>
-        <Typography variant="caption" display="block" gutterBottom>
+        <Typography variant='caption' display='block' gutterBottom>
           Label opacity
         </Typography>
         <Paper style={{ padding: '3px' }}>
           <Slider
             ValueLabelComponent={ValueLabelComponent}
-            aria-label="label"
+            aria-label='label'
             defaultValue={opacity}
             onChange={this.changeOpacityControl}
           />
@@ -66,7 +67,7 @@ class SliderComponent extends Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   return {
     opacity: state.control.opacity
   };

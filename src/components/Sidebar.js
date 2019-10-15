@@ -32,7 +32,7 @@ const styles = theme => ({
 });
 
 class Sidebar extends Component {
-  constructor() {
+  constructor () {
     super();
     this.contentEditable = React.createRef();
   }
@@ -45,7 +45,7 @@ class Sidebar extends Component {
     this.props.dispatch(downloadGeojsonFile(true));
   };
 
-  render() {
+  render () {
     const { classes, labels, currentlabel } = this.props;
     return (
       <div>
@@ -61,9 +61,9 @@ class Sidebar extends Component {
                   style={{ paddingBottom: '2px', paddingTop: '2px' }}
                 >
                   <Grid item xs={12}>
-                    <Grid container justify="center">
+                    <Grid container justify='center'>
                       <Grid item xs={8}>
-                        <Typography className={classes.title} color="textSecondary" gutterBottom>
+                        <Typography className={classes.title} color='textSecondary' gutterBottom>
                           {config.classes[id].name || label.class}
                         </Typography>
                       </Grid>
@@ -71,7 +71,7 @@ class Sidebar extends Component {
                         <span
                           style={{ background: label.color, marginLeft: '5px' }}
                           className={classes.legendSpan}
-                        ></span>
+                        />
                       </Grid>
                     </Grid>
                   </Grid>
@@ -87,7 +87,7 @@ class Sidebar extends Component {
             <div>
               <Slider />
               <div style={{ margin: '3px' }}>
-                <Button variant="outlined" onClick={this.downloadFile}>
+                <Button variant='outlined' onClick={this.downloadFile}>
                   Download
                 </Button>
               </div>
