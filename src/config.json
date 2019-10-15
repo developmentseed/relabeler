@@ -9,11 +9,15 @@
         },
         {
             "name": "hospital",
-            "layers": []
+            "layers": [
+                "https://a.tiles.mapbox.com/styles/v1/devseed/ck1m8u6etaioh1cqpvqybzo7q/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGV2c2VlZCIsImEiOiJnUi1mbkVvIn0.018aLhX0Mb0tdtaT2QNe2Q"
+            ]
         },
         {
             "name": "university",
-            "layers": []
+            "layers": [
+                "https://a.tiles.mapbox.com/styles/v1/devseed/ck1mb4xu84p511cn3rgphhaf4/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGV2c2VlZCIsImEiOiJnUi1mbkVvIn0.018aLhX0Mb0tdtaT2QNe2Q"
+            ]
         },
         {
             "name": "school",
@@ -23,27 +27,39 @@
         },
         {
             "name": "place_of_worship",
-            "layers": []
+            "layers": [
+                "https://a.tiles.mapbox.com/styles/v1/devseed/ck1mc3rjp1j5o1cm3hbiuw81q/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGV2c2VlZCIsImEiOiJnUi1mbkVvIn0.018aLhX0Mb0tdtaT2QNe2Q"
+            ]
         },
         {
             "name": "government",
-            "layers": []
+            "layers": [
+                "https://a.tiles.mapbox.com/styles/v1/devseed/ck1m8jad18u221cl6dbww317q/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGV2c2VlZCIsImEiOiJnUi1mbkVvIn0.018aLhX0Mb0tdtaT2QNe2Q"
+            ]
         },
         {
             "name": "transportation",
-            "layers": []
+            "layers": [
+                "https://a.tiles.mapbox.com/styles/v1/devseed/ck1mayd0i3c7c1cp80c3dqnqe/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGV2c2VlZCIsImEiOiJnUi1mbkVvIn0.018aLhX0Mb0tdtaT2QNe2Q"
+            ]
         },
         {
             "name": "commercial",
-            "layers": []
+            "layers": [
+                "https://a.tiles.mapbox.com/styles/v1/devseed/ck1l7bkkz0dz91clmhvzw0086/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGV2c2VlZCIsImEiOiJnUi1mbkVvIn0.018aLhX0Mb0tdtaT2QNe2Q"
+            ]
         },
         {
             "name": "industry",
-            "layers": []
+            "layers": [
+                "https://a.tiles.mapbox.com/styles/v1/devseed/ck1majhp23btn1cp8elw5bgbo/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGV2c2VlZCIsImEiOiJnUi1mbkVvIn0.018aLhX0Mb0tdtaT2QNe2Q"
+            ]
         },
         {
             "name": "sports",
-            "layers": []
+            "layers": [
+                "https://a.tiles.mapbox.com/styles/v1/devseed/ck1masnggal8a1cld82vstk2l/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGV2c2VlZCIsImEiOiJnUi1mbkVvIn0.018aLhX0Mb0tdtaT2QNe2Q"
+            ]
         },
         {
             "name": "residential",
