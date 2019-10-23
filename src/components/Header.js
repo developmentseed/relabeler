@@ -39,7 +39,10 @@ class Header extends Component {
 }
 
 Header.propTypes = {
-  classes: PropTypes.object
+  classes: PropTypes.object,
+  open: PropTypes.bool,
+  handleDrawerOpen: PropTypes.func
+
 };
 
 export default withStyles(styles)(Header);

@@ -51,40 +51,38 @@ class Sidebar extends Component {
     return (
       <div>
         <MenuList>
-          {labels.map((label, id) => {
-            return (
-              <div key={id}>
-                <MenuItem
-                  selected={label.id === currentlabel.id}
-                  onClick={() => {
-                    this.choseLabel(label, id);
-                  }}
-                  style={{ paddingBottom: '2px', paddingTop: '2px' }}
-                >
-                  <Grid item xs={12}>
-                    <Grid container justify='center'>
-                      <Grid item xs={8}>
-                        <Typography
-                          className={classes.title}
-                          color='textSecondary'
-                          gutterBottom
-                        >
-                          {config.classes[id].name || label.class}
-                        </Typography>
-                      </Grid>
-                      <Grid item xs={4}>
-                        <span
-                          style={{ background: label.color, marginLeft: '5px' }}
-                          className={classes.legendSpan}
-                        />
-                      </Grid>
+          {labels.map((label, id) => (
+            <div key={id.toString()}>
+              <MenuItem
+                selected={label.id === currentlabel.id}
+                onClick={() => {
+                  this.choseLabel(label, id);
+                }}
+                style={{ paddingBottom: '2px', paddingTop: '2px' }}
+              >
+                <Grid item xs={12}>
+                  <Grid container justify='center'>
+                    <Grid item xs={8}>
+                      <Typography
+                        className={classes.title}
+                        color='textSecondary'
+                        gutterBottom
+                      >
+                        {config.classes[id].name || label.class}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <span
+                        style={{ background: label.color, marginLeft: '5px' }}
+                        className={classes.legendSpan}
+                      />
                     </Grid>
                   </Grid>
-                </MenuItem>
-                <Divider />
-              </div>
-            );
-          })}
+                </Grid>
+              </MenuItem>
+              <Divider />
+            </div>
+          ))}
         </MenuList>
         {labels.length === 0 ? <Loadfile /> : null}
         <CardActions>
@@ -106,7 +104,10 @@ class Sidebar extends Component {
 }
 
 Sidebar.propTypes = {
-  classes: PropTypes.object
+  classes: PropTypes.object,
+  dispatch: PropTypes.func,
+  labels: PropTypes.object,
+  currentlabel: PropTypes.object
 };
 
 const mapStateToProps = state => ({

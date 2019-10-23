@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Files from 'react-files';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { fetchData } from './../actions/dataActions';
 import Paper from '@material-ui/core/Paper';
@@ -16,7 +17,7 @@ class Loadfile extends Component {
   }
 
   onFilesError (error, file) {
-    console.log('error code ' + error.code + ': ' + error.message);
+    console.err('error code ' + error.code + ': ' + error.message);
   }
 
   render () {
@@ -43,5 +44,9 @@ class Loadfile extends Component {
     );
   }
 }
+
+Loadfile.propTypes = {
+  dispatch: PropTypes.func
+};
 
 export default connect(null)(Loadfile);
