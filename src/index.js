@@ -7,7 +7,7 @@ import App from './App';
 
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter basename={'/relabeler'}>
+    <BrowserRouter basename='/relabeler'>
       <Switch>
         <Route exact component={App} path='/' />
       </Switch>
