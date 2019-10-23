@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import clsx from 'clsx';
+import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/styles';
 import Drawer from '@material-ui/core/Drawer';
 import Typography from '@material-ui/core/Typography';
@@ -21,13 +22,13 @@ class Home extends Component {
     this.props.dispatch(fetchDataURL(url));
   }
 
-  handleDrawerOpen = () => {
+  handleDrawerOpen () {
     this.setState({ open: true });
-  };
+  }
 
-  handleDrawerClose = () => {
+  handleDrawerClose () {
     this.setState({ open: false });
-  };
+  }
 
   render () {
     // const open =true;
@@ -61,6 +62,10 @@ class Home extends Component {
     );
   }
 }
+
+Home.propTypes = {
+  classes: PropTypes.object
+};
 
 const mapStateToProps = state => ({});
 

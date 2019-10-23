@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import CardActions from '@material-ui/core/CardActions';
 import Button from '@material-ui/core/Button';
@@ -37,13 +38,13 @@ class Sidebar extends Component {
     this.contentEditable = React.createRef();
   }
 
-  choseLabel = (label, id) => {
+  choseLabel (label, id) {
     this.props.dispatch(setLabel(label));
-  };
+  }
 
-  downloadFile = () => {
+  downloadFile () {
     this.props.dispatch(downloadGeojsonFile(true));
-  };
+  }
 
   render () {
     const { classes, labels, currentlabel } = this.props;
@@ -63,7 +64,11 @@ class Sidebar extends Component {
                   <Grid item xs={12}>
                     <Grid container justify='center'>
                       <Grid item xs={8}>
-                        <Typography className={classes.title} color='textSecondary' gutterBottom>
+                        <Typography
+                          className={classes.title}
+                          color='textSecondary'
+                          gutterBottom
+                        >
                           {config.classes[id].name || label.class}
                         </Typography>
                       </Grid>
@@ -99,6 +104,10 @@ class Sidebar extends Component {
     );
   }
 }
+
+Sidebar.propTypes = {
+  classes: PropTypes.object
+};
 
 const mapStateToProps = state => ({
   labels: state.geojsonData.labels,
