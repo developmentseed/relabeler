@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import mapboxgl from 'mapbox-gl';
+import PropTypes from 'prop-types';
 import bbox from '@turf/bbox';
 import { saveAs } from 'file-saver';
 import { connect } from 'react-redux';
@@ -199,6 +200,14 @@ class Map extends Component {
     );
   }
 }
+
+Map.propTypes = {
+  dispatch: PropTypes.func,
+  data: PropTypes.object,
+  currentlabel: PropTypes.object,
+  opacity: PropTypes.number,
+  downloadFile: PropTypes.bool
+};
 
 const mapStateToProps = state => ({
   data: state.geojsonData.data,

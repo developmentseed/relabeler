@@ -47,7 +47,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint src/ --ext .js",
+    "lint": "./node_modules/.bin/eslint src/ --ext .js",
     "deploy": "yarn build && gh-pages -d build"
   },
   "eslintConfig": {
