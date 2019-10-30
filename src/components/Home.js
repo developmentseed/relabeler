@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import clsx from 'clsx';
 import { withStyles } from '@material-ui/styles';
-import Drawer from '@material-ui/core/Drawer';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
+import { Drawer, Typography, Divider, IconButton } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
+import PropTypes from 'prop-types';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Header from './Header';
 import styles from './../style/HomeStyles';
@@ -16,18 +14,20 @@ import { fetchDataURL } from './../actions/dataActions';
 class Home extends Component {
   constructor (props) {
     super(props);
+    this.handleDrawerOpen = this.handleDrawerOpen.bind(this);
+    this.handleDrawerClose = this.handleDrawerClose.bind(this);
     this.state = { open: true };
     const url = window.location.href.split('?url=')[1];
     this.props.dispatch(fetchDataURL(url));
   }
 
-  handleDrawerOpen = () => {
+  handleDrawerOpen () {
     this.setState({ open: true });
-  };
+  }
 
-  handleDrawerClose = () => {
+  handleDrawerClose () {
     this.setState({ open: false });
-  };
+  }
 
   render () {
     // const open =true;
@@ -61,6 +61,11 @@ class Home extends Component {
     );
   }
 }
+
+Home.propTypes = {
+  classes: PropTypes.object,
+  dispatch: PropTypes.func
+};
 
 const mapStateToProps = state => ({});
 

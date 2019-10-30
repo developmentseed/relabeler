@@ -3,6 +3,7 @@ import mapboxgl from 'mapbox-gl';
 import bbox from '@turf/bbox';
 import { saveAs } from 'file-saver';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import MapLoadingProgress from './MapLoadingProgress';
 import { downloadGeojsonFile } from '../actions/controlAction';
 import config from './../config.json';
@@ -62,6 +63,18 @@ class Map extends Component {
     this.map = map;
   }
 
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.data && nextProps.currentlabel) {
+      this.initLabels(nextProps.data, nextProps.currentlabel, nextProps.opacity);
+    }
+
+    // Download geojso file
+    if (nextProps.downloadFile) {
+      this.save();
+      this.props.dispatch(downloadGeojsonFile(false));
+    }
+  }
+
   onLabelClick (event) {
     // shift the label by one
     const feature = event.features[0];
@@ -75,18 +88,6 @@ class Map extends Component {
       return f;
     });
     this.map.getSource('labels').setData(data);
-  }
-
-  componentWillReceiveProps (nextProps) {
-    if (nextProps.data && nextProps.currentlabel) {
-      this.initLabels(nextProps.data, nextProps.currentlabel, nextProps.opacity);
-    }
-
-    // Download geojso file
-    if (nextProps.downloadFile) {
-      this.save();
-      this.props.dispatch(downloadGeojsonFile(false));
-    }
   }
 
   save () {
@@ -139,8 +140,8 @@ class Map extends Component {
         source: 'labels',
         type: 'line',
         paint: {
-          'line-width': ['match', ['get', 'status'], 'no', 2, 'yes', 2, 1],
-          'line-color': ['match', ['get', 'status'], 'no', '#e77cff', 'yes', '#e77cff', 'white'],
+          'line-width': ['match', ['get', 'status'], 'no', 4, 'yes', 4, 1],
+          'line-color': ['match', ['get', 'status'], 'no', '#ff0000', 'yes', '#ff0000', 'white'],
           'line-opacity': opacity / 100
         }
       };
@@ -199,6 +200,14 @@ class Map extends Component {
     );
   }
 }
+
+Map.propTypes = {
+  data: PropTypes.object,
+  currentlabel: PropTypes.object,
+  opacity: PropTypes.number,
+  downloadFile: PropTypes.bool,
+  dispatch: PropTypes.func
+};
 
 const mapStateToProps = state => ({
   data: state.geojsonData.data,

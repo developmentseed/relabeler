@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { fetchData } from './../actions/dataActions';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import PropTypes from 'prop-types';
 
 class Loadfile extends Component {
   constructor (props) {
@@ -43,5 +44,9 @@ class Loadfile extends Component {
     );
   }
 }
+
+Loadfile.propTypes = {
+  dispatch: PropTypes.func
+};
 
 export default connect(null)(Loadfile);

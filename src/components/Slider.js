@@ -67,9 +67,13 @@ class SliderComponent extends Component {
   }
 }
 
-function mapStateToProps (state) {
-  return {
-    opacity: state.control.opacity
-  };
-}
+SliderComponent.propTypes = {
+  dispatch: PropTypes.func,
+  opacity: PropTypes.number
+};
+
+const mapStateToProps = state => ({
+  opacity: state.control.opacity
+});
+
 export default connect(mapStateToProps)(SliderComponent);
