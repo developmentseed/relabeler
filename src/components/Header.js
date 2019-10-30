@@ -42,7 +42,6 @@ Header.propTypes = {
   classes: PropTypes.object,
   open: PropTypes.bool,
   handleDrawerOpen: PropTypes.func
-
 };
 
 export default withStyles(styles)(Header);

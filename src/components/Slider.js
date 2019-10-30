@@ -72,9 +72,8 @@ SliderComponent.propTypes = {
   opacity: PropTypes.number
 };
 
-function mapStateToProps (state) {
-  return {
-    opacity: state.control.opacity
-  };
-}
+const mapStateToProps = state => ({
+  opacity: state.control.opacity
+});
+
 export default connect(mapStateToProps)(SliderComponent);
