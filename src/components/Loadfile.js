@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import Files from 'react-files';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { fetchData } from './../actions/dataActions';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import PropTypes from 'prop-types';
 
 class Loadfile extends Component {
   constructor (props) {
@@ -17,7 +17,7 @@ class Loadfile extends Component {
   }
 
   onFilesError (error, file) {
-    console.log('error code ' + error.code + ': ' + error.message);
+    console.err('error code ' + error.code + ': ' + error.message);
   }
 
   render () {

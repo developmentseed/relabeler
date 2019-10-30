@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import clsx from 'clsx';
+import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/styles';
 import { Drawer, Typography, Divider, IconButton } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
-import PropTypes from 'prop-types';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Header from './Header';
 import styles from './../style/HomeStyles';

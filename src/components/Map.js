@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import mapboxgl from 'mapbox-gl';
+import PropTypes from 'prop-types';
 import bbox from '@turf/bbox';
 import { saveAs } from 'file-saver';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import MapLoadingProgress from './MapLoadingProgress';
 import { downloadGeojsonFile } from '../actions/controlAction';
 import config from './../config.json';

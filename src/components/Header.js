@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import clsx from 'clsx';
-import { withStyles } from '@material-ui/styles';
 import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';

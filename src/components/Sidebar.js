@@ -1,19 +1,17 @@
 import React, { Component } from 'react';
-import {
-  withStyles,
-  CardActions,
-  Button,
-  Typography,
-  Grid,
-  MenuItem,
-  MenuList,
-  Divider
-} from '@material-ui/core';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import CardActions from '@material-ui/core/CardActions';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
+import Grid from '@material-ui/core/Grid';
+import MenuItem from '@material-ui/core/MenuItem';
+import MenuList from '@material-ui/core/MenuList';
 import { setLabel } from '../actions/dataActions';
-import PropTypes from 'prop-types';
 import { downloadGeojsonFile } from '../actions/controlAction';
+import Divider from '@material-ui/core/Divider';
 import config from './../config.json';
 import Loadfile from './Loadfile';
 import Slider from './Slider';
@@ -53,36 +51,38 @@ class Sidebar extends Component {
     return (
       <div>
         <MenuList>
-          {labels.map((label, id) => {
-            return (
-              <div key={`${id}`}>
-                <MenuItem
-                  selected={label.id === currentlabel.id}
-                  onClick={() => {
-                    this.choseLabel(label, id);
-                  }}
-                  style={{ paddingBottom: '2px', paddingTop: '2px' }}
-                >
-                  <Grid item xs={12}>
-                    <Grid container justify='center'>
-                      <Grid item xs={8}>
-                        <Typography className={classes.title} color='textSecondary' gutterBottom>
-                          {config.classes[id].name || label.class}
-                        </Typography>
-                      </Grid>
-                      <Grid item xs={4}>
-                        <span
-                          style={{ background: label.color, marginLeft: '5px' }}
-                          className={classes.legendSpan}
-                        />
-                      </Grid>
+          {labels.map((label, id) => (
+            <div key={id.toString()}>
+              <MenuItem
+                selected={label.id === currentlabel.id}
+                onClick={() => {
+                  this.choseLabel(label, id);
+                }}
+                style={{ paddingBottom: '2px', paddingTop: '2px' }}
+              >
+                <Grid item xs={12}>
+                  <Grid container justify='center'>
+                    <Grid item xs={8}>
+                      <Typography
+                        className={classes.title}
+                        color='textSecondary'
+                        gutterBottom
+                      >
+                        {config.classes[id].name || label.class}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <span
+                        style={{ background: label.color, marginLeft: '5px' }}
+                        className={classes.legendSpan}
+                      />
                     </Grid>
                   </Grid>
-                </MenuItem>
-                <Divider />
-              </div>
-            );
-          })}
+                </Grid>
+              </MenuItem>
+              <Divider />
+            </div>
+          ))}
         </MenuList>
         {labels.length === 0 ? <Loadfile /> : null}
         <CardActions>
@@ -106,9 +106,10 @@ class Sidebar extends Component {
 Sidebar.propTypes = {
   classes: PropTypes.object,
   dispatch: PropTypes.func,
-  labels: PropTypes.array,
+  labels: PropTypes.object,
   currentlabel: PropTypes.object
 };
+
 const mapStateToProps = state => ({
   labels: state.geojsonData.labels,
   currentlabel: state.geojsonData.label
