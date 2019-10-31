@@ -36,6 +36,8 @@ class Sidebar extends Component {
   constructor () {
     super();
     this.contentEditable = React.createRef();
+    this.choseLabel = this.choseLabel.bind(this);
+    this.downloadFile = this.downloadFile.bind(this);
   }
 
   choseLabel (label, id) {

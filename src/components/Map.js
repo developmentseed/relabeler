@@ -140,8 +140,8 @@ class Map extends Component {
         source: 'labels',
         type: 'line',
         paint: {
-          'line-width': ['match', ['get', 'status'], 'no', 4, 'yes', 4, 1],
-          'line-color': ['match', ['get', 'status'], 'no', '#ff0000', 'yes', '#ff0000', 'white'],
+          'line-width': ['match', ['get', 'status'], 'no', 8, 'yes', 8, 1],
+          'line-color': ['match', ['get', 'status'], 'no', '#dc00ff', 'yes', '#dc00ff', 'white'],
           'line-opacity': opacity / 100
         }
       };
