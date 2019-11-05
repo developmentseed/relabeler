@@ -1,20 +1,21 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import CardActions from '@material-ui/core/CardActions';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import {
+  CardActions,
+  Typography,
+  Grid,
+  MenuItem,
+  MenuList,
+  Divider
+} from '@material-ui/core';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
-import Grid from '@material-ui/core/Grid';
-import MenuItem from '@material-ui/core/MenuItem';
-import MenuList from '@material-ui/core/MenuList';
 import { setLabel } from '../actions/dataActions';
-import { downloadGeojsonFile } from '../actions/controlAction';
-import Divider from '@material-ui/core/Divider';
 import config from './../config.json';
 import Loadfile from './Loadfile';
 import Slider from './Slider';
+import DisplayConflicts from './DisplayConflicts';
 
 const styles = theme => ({
   title: {
@@ -37,15 +38,10 @@ class Sidebar extends Component {
     super();
     this.contentEditable = React.createRef();
     this.choseLabel = this.choseLabel.bind(this);
-    this.downloadFile = this.downloadFile.bind(this);
   }
 
   choseLabel (label, id) {
     this.props.dispatch(setLabel(label));
-  }
-
-  downloadFile () {
-    this.props.dispatch(downloadGeojsonFile(true));
   }
 
   render () {
@@ -91,13 +87,13 @@ class Sidebar extends Component {
           {labels.length > 0 ? (
             <div>
               <Slider />
-              <div style={{ margin: '3px' }}>
-                <Button variant='outlined' onClick={this.downloadFile}>
-                  Download
-                </Button>
-              </div>
             </div>
           ) : null}
+        </CardActions>
+        <Divider />
+
+        <CardActions>
+          <DisplayConflicts />
         </CardActions>
         <Divider />
       </div>

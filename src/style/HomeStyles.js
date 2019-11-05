@@ -8,7 +8,8 @@ const styles = theme => ({
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen
-    })
+    }),
+    flexGrow: 1
   },
   appBarShift: {
     width: `calc(100% - ${drawerWidth}px)`,
@@ -50,6 +51,21 @@ const styles = theme => ({
       duration: theme.transitions.duration.enteringScreen
     }),
     marginLeft: 0
+  },
+  button: {
+    position: 'absolute',
+    right: '5px',
+    color: '#fff !important',
+    textTransform: 'uppercase',
+    textDecoration: 'none',
+    background: '#ed3330',
+    // padding: '20px',
+    // borderRadius: '5px',
+    display: 'inline-block',
+    border: 'none',
+    textAlign: 'center',
+    transition: 'all 0.4s ease 0s',
+    width: '180px'
   }
 });
 
