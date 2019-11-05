@@ -27,8 +27,9 @@ class Header extends Component {
         className={clsx(classes.appBar, {
           [classes.appBarShift]: open
         })}
+        // style={{ margin:'4px'}}
       >
-        <Toolbar>
+        <Toolbar className={classes.toolbar}>
           <IconButton
             color='inherit'
             aria-label='open drawer'

@@ -70,7 +70,8 @@ class Map extends Component {
       this.initLabels(nextProps.data, nextProps.currentlabel, nextProps.opacity);
     }
     if (nextProps.feature) {
-      this.updateFeatures(nextProps.feature);
+      this.updateFeature(nextProps.feature);
+      this.activeStyle(nextProps.feature);
     }
 
     // Download geojso file
@@ -80,17 +81,43 @@ class Map extends Component {
     }
   }
 
-  updateFeatures (feature) {
+  updateFeature (feature) {
     const data = this.props.data;
     data.features = this.props.data.features.map(f => {
       if (f.properties.index === feature.properties.index) {
         f.properties = Object.assign({}, feature.properties);
-        // f = validateTile(f);
-        // this.props.dispatch(selectedFeature(f));
       }
       return f;
     });
     this.map.getSource('labels').setData(data);
+  }
+
+  activeStyle (feature) {
+    if (!this.map.getSource('activeFeature')) {
+      this.map.addSource('activeFeature', {
+        type: 'geojson',
+        data: {
+          type: 'FeatureCollection',
+          features: [feature]
+        }
+      });
+      const activeFeatureLayer = {
+        id: 'activeFeature',
+        source: 'activeFeature',
+        type: 'line',
+        paint: {
+          'line-width': 4,
+          'line-color': '#ffff00',
+          'line-opacity': 0.8
+        }
+      };
+      this.map.addLayer(activeFeatureLayer);
+    } else {
+      this.map.getSource('activeFeature').setData({
+        type: 'FeatureCollection',
+        features: [feature]
+      });
+    }
   }
 
   onLabelClick (event) {
@@ -161,7 +188,7 @@ class Map extends Component {
         type: 'line',
         paint: {
           'line-width': ['match', ['get', 'status'], 'no', 4, 'yes', 4, 1],
-          'line-color': ['match', ['get', 'status'], 'no', '#dc00ff', 'yes', '#dc00ff', 'white'],
+          'line-color': ['match', ['get', 'status'], 'no', '#30ff07', 'yes', '#30ff07', 'white'],
           'line-opacity': opacity / 100
         }
       };

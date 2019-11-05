@@ -50,7 +50,7 @@ class SliderComponent extends Component {
   render () {
     const { opacity } = this.props;
     return (
-      <div style={{ width: '210px', margin: '5px' }}>
+      <div style={{ width: '210px', margin: '1px' }}>
         <Typography variant='caption' display='block' gutterBottom>
           Label opacity
         </Typography>

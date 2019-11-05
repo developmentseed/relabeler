@@ -19,6 +19,12 @@ const styles = theme => ({
       duration: theme.transitions.duration.enteringScreen
     })
   },
+  toolbar: {
+    minHeight: 56,
+    [theme.breakpoints.up('sm')]: {
+      minHeight: 50
+    }
+  },
   menuButton: {
     marginRight: theme.spacing(2)
   },
@@ -38,7 +44,9 @@ const styles = theme => ({
     padding: theme.spacing(0, 1),
     ...theme.mixins.toolbar,
     justifyContent: 'space-between',
-    backgroundColor: theme.palette.primary.main
+    backgroundColor: theme.palette.primary.main,
+    minHeight: '50px !important',
+    height: '50px !important'
   },
   content: {
     flexGrow: 1,
@@ -59,12 +67,9 @@ const styles = theme => ({
     textTransform: 'uppercase',
     textDecoration: 'none',
     background: '#ed3330',
-    // padding: '20px',
-    // borderRadius: '5px',
     display: 'inline-block',
     border: 'none',
     textAlign: 'center',
-    transition: 'all 0.4s ease 0s',
     width: '180px'
   }
 });

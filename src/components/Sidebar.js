@@ -83,6 +83,7 @@ class Sidebar extends Component {
           ))}
         </MenuList>
         {labels.length === 0 ? <Loadfile /> : null}
+        <Divider />
         <CardActions>
           {labels.length > 0 ? (
             <div>
@@ -91,7 +92,6 @@ class Sidebar extends Component {
           ) : null}
         </CardActions>
         <Divider />
-
         <CardActions>
           <DisplayConflicts />
         </CardActions>
@@ -104,7 +104,7 @@ class Sidebar extends Component {
 Sidebar.propTypes = {
   classes: PropTypes.object,
   dispatch: PropTypes.func,
-  labels: PropTypes.object,
+  labels: PropTypes.array,
   currentlabel: PropTypes.object
 };
 

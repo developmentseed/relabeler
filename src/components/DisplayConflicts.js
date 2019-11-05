@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Chip from '@material-ui/core/Chip';
+import { Chip, Typography } from '@material-ui/core';
 import ErrorIcon from '@material-ui/icons/Error';
 import PropTypes from 'prop-types';
 import { selectedFeature } from '../actions/featureActions';
@@ -18,7 +18,10 @@ class DisplayConflicts extends Component {
   render () {
     const { feature, labels } = this.props;
     return (
-      <div>
+      <div style={{ width: '210px', margin: '1px' }}>
+        <Typography variant='caption' display='block' gutterBottom>
+        Labels on the tile
+        </Typography>
         {
           feature ? feature.properties.label.map((label, index) => {
             if (label === 1) {
@@ -36,7 +39,6 @@ class DisplayConflicts extends Component {
             }
           }) : null
         }
-
       </div>
     );
   }
@@ -44,7 +46,7 @@ class DisplayConflicts extends Component {
 
 DisplayConflicts.propTypes = {
   feature: PropTypes.object,
-  labels: PropTypes.object,
+  labels: PropTypes.array,
   dispatch: PropTypes.func
 };
 
