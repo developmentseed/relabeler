@@ -1,19 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { makeStyles } from '@material-ui/core/styles';
-import Avatar from '@material-ui/core/Avatar';
 import Chip from '@material-ui/core/Chip';
 import ErrorIcon from '@material-ui/icons/Error';
-import DoneIcon from '@material-ui/icons/Done';
+import PropTypes from 'prop-types';
+import { selectedFeature } from '../actions/featureActions';
+import { validateTile } from './../utils/validate';
 import config from './../config.json';
 
 class DisplayConflicts extends Component {
-  handleDelete () {
-    alert('You clicked the delete icon.');
-  }
-
-  handleClick () {
-    alert('You clicked the Chip.');
+  setLabelIn0 (index) {
+    let feature = this.props.feature;
+    feature.properties.label[index] = 0;
+    feature = validateTile(feature);
+    this.props.dispatch(selectedFeature(feature));
   }
 
   render () {
@@ -21,13 +20,20 @@ class DisplayConflicts extends Component {
     return (
       <div>
         {
-          feature ? feature.properties.conflictType.map(conflict => {
-            return (<Chip
-              icon={<ErrorIcon />}
-              label={config.classes[conflict.index].name || labels[conflict.index]}
-              onDelete={this.handleDelete}
-              style={{ backgroundColor: labels[conflict.index].color }}
-            />);
+          feature ? feature.properties.label.map((label, index) => {
+            if (label === 1) {
+              return (
+                <Chip
+                  key={`chip-${index}`}
+                  icon={<ErrorIcon />}
+                  label={config.classes[index].name || labels[index]}
+                  onDelete={() => { this.setLabelIn0(index); }}
+                  style={{ backgroundColor: labels[index].color }}
+                />
+              );
+            } else {
+              return null;
+            }
           }) : null
         }
 
@@ -35,6 +41,12 @@ class DisplayConflicts extends Component {
     );
   }
 }
+
+DisplayConflicts.propTypes = {
+  feature: PropTypes.object,
+  labels: PropTypes.object,
+  dispatch: PropTypes.func
+};
 
 const mapStateToProps = state => ({
   feature: state.tile.feature,

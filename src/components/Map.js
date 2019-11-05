@@ -69,12 +69,28 @@ class Map extends Component {
     if (nextProps.data && nextProps.currentlabel) {
       this.initLabels(nextProps.data, nextProps.currentlabel, nextProps.opacity);
     }
+    if (nextProps.feature) {
+      this.updateFeatures(nextProps.feature);
+    }
 
     // Download geojso file
     if (nextProps.downloadFile) {
       this.save();
       this.props.dispatch(downloadGeojsonFile(false));
     }
+  }
+
+  updateFeatures (feature) {
+    const data = this.props.data;
+    data.features = this.props.data.features.map(f => {
+      if (f.properties.index === feature.properties.index) {
+        f.properties = Object.assign({}, feature.properties);
+        // f = validateTile(f);
+        // this.props.dispatch(selectedFeature(f));
+      }
+      return f;
+    });
+    this.map.getSource('labels').setData(data);
   }
 
   onLabelClick (event) {
@@ -144,7 +160,7 @@ class Map extends Component {
         source: 'labels',
         type: 'line',
         paint: {
-          'line-width': ['match', ['get', 'status'], 'no', 8, 'yes', 8, 1],
+          'line-width': ['match', ['get', 'status'], 'no', 4, 'yes', 4, 1],
           'line-color': ['match', ['get', 'status'], 'no', '#dc00ff', 'yes', '#dc00ff', 'white'],
           'line-opacity': opacity / 100
         }
@@ -155,8 +171,9 @@ class Map extends Component {
         source: 'labels',
         type: 'line',
         paint: {
-          'line-width': ['match', ['get', 'conflict'], 'yes', 2, 0],
-          'line-color': ['match', ['get', 'conflict'], 'yes', '#ff0000', 'white'],
+          'line-width': ['match', ['get', 'conflict'], 'yes', 1, 0],
+          'line-color': ['match', ['get', 'conflict'], 'yes', '#ff0000', 'no', 'white', 'white'],
+          'line-dasharray': [5, 15],
           'line-opacity': opacity / 100
         }
       };
@@ -221,6 +238,7 @@ class Map extends Component {
 Map.propTypes = {
   data: PropTypes.object,
   currentlabel: PropTypes.object,
+  feature: PropTypes.object,
   opacity: PropTypes.number,
   downloadFile: PropTypes.bool,
   dispatch: PropTypes.func
@@ -233,7 +251,8 @@ const mapStateToProps = state => ({
   labels: state.geojsonData.labels,
   currentlabel: state.geojsonData.label,
   opacity: state.control.opacity,
-  downloadFile: state.control.downloadFile
+  downloadFile: state.control.downloadFile,
+  feature: state.tile.feature
 });
 
 export default connect(mapStateToProps)(Map);
