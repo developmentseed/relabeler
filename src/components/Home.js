@@ -10,6 +10,8 @@ import Header from './Header';
 import styles from './../style/HomeStyles';
 import Map from './Map';
 import Sidebar from './Sidebar';
+import DisplayConflicts from './DisplayConflicts';
+
 import { fetchDataURL } from './../actions/dataActions';
 class Home extends Component {
   constructor (props) {
@@ -55,6 +57,7 @@ class Home extends Component {
           </div>
           <Divider />
           <Sidebar />
+          <DisplayConflicts />
         </Drawer>
         <Map className={clsx(classes.content)} />
       </div>

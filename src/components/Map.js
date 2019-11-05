@@ -6,6 +6,9 @@ import { saveAs } from 'file-saver';
 import { connect } from 'react-redux';
 import MapLoadingProgress from './MapLoadingProgress';
 import { downloadGeojsonFile } from '../actions/controlAction';
+import { selectedFeature } from '../actions/featureActions';
+
+import { validateTile } from './../utils/validate';
 import config from './../config.json';
 class Map extends Component {
   constructor (props) {
@@ -84,6 +87,8 @@ class Map extends Component {
       if (f.properties.index === feature.properties.index) {
         f.properties.label[clase.id] = f.properties.label[clase.id] ? 0 : 1;
         f.properties.status = !f.properties.status || f.properties.status === 'no' ? 'yes' : 'no';
+        f = validateTile(f);
+        this.props.dispatch(selectedFeature(f));
       }
       return f;
     });
@@ -135,8 +140,8 @@ class Map extends Component {
         }
       };
 
-      const lineLayer = {
-        id: 'labels-line',
+      const reviewLayer = {
+        id: 'reviewLayer',
         source: 'labels',
         type: 'line',
         paint: {
@@ -146,11 +151,22 @@ class Map extends Component {
         }
       };
 
+      const conflictLayer = {
+        id: 'conflictLayer',
+        source: 'labels',
+        type: 'line',
+        paint: {
+          'line-width': ['match', ['get', 'conflict'], 'yes', 8, 0],
+          'line-color': ['match', ['get', 'conflict'], 'yes', '#ff0000', 'white'],
+          'line-opacity': opacity / 100
+        }
+      };
       /**
        * Set label
        */
       data.features = data.features.map((f, i) => {
         f.properties.index = i;
+        f = validateTile(f);
         return f;
       });
       this.map.addSource('labels', {
@@ -161,11 +177,13 @@ class Map extends Component {
       // zoom to the data
       this.map.fitBounds([[box[0], box[1]], [box[2], box[3]]]);
       this.map.addLayer(paintLayer);
-      this.map.addLayer(lineLayer);
+      this.map.addLayer(reviewLayer);
+      this.map.addLayer(conflictLayer);
     } else {
       this.map.setPaintProperty('labels', 'fill-color', fillColors);
       this.map.setPaintProperty('labels', 'fill-opacity', opacity / 100);
-      this.map.setPaintProperty('labels-line', 'line-opacity', opacity / 100);
+      this.map.setPaintProperty('reviewLayer', 'line-opacity', opacity / 100);
+      this.map.setPaintProperty('conflictLayer', 'line-opacity', opacity / 100);
       // show and hide layers
       config.classes.forEach((c, i) => {
         const layerName = c.name;
