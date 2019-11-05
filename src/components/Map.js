@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import MapLoadingProgress from './MapLoadingProgress';
 import { downloadGeojsonFile } from '../actions/controlAction';
 import { selectedFeature } from '../actions/featureActions';
-
 import { validateTile } from './../utils/validate';
 import config from './../config.json';
 class Map extends Component {
@@ -156,7 +155,7 @@ class Map extends Component {
         source: 'labels',
         type: 'line',
         paint: {
-          'line-width': ['match', ['get', 'conflict'], 'yes', 8, 0],
+          'line-width': ['match', ['get', 'conflict'], 'yes', 2, 0],
           'line-color': ['match', ['get', 'conflict'], 'yes', '#ff0000', 'white'],
           'line-opacity': opacity / 100
         }

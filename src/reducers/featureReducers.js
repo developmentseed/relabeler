@@ -9,7 +9,7 @@ export default function selectedFeature (state = initialState, action) {
     case SELECTED_FEATURE:
       return {
         ...state,
-        feature: action.payload.feature
+        feature: Object.assign({}, action.payload.feature)
       };
     default:
       return state;
