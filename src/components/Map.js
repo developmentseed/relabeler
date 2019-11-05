@@ -187,8 +187,9 @@ class Map extends Component {
         source: 'labels',
         type: 'line',
         paint: {
-          'line-width': ['match', ['get', 'status'], 'no', 4, 'yes', 4, 1],
+          'line-width': ['match', ['get', 'status'], 'no', 3, 'yes', 3, 1],
           'line-color': ['match', ['get', 'status'], 'no', '#30ff07', 'yes', '#30ff07', 'white'],
+          'line-gap-width': ['match', ['get', 'status'], 'no', 2, 'yes', 2, 0],
           'line-opacity': opacity / 100
         }
       };
@@ -198,9 +199,9 @@ class Map extends Component {
         source: 'labels',
         type: 'line',
         paint: {
-          'line-width': ['match', ['get', 'conflict'], 'yes', 1, 0],
+          'line-width': ['match', ['get', 'conflict'], 'yes', 2, 0],
           'line-color': ['match', ['get', 'conflict'], 'yes', '#ff0000', 'no', 'white', 'white'],
-          'line-dasharray': [5, 15],
+          'line-dasharray': [10, 10],
           'line-opacity': opacity / 100
         }
       };
