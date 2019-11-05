@@ -6,6 +6,8 @@ import { saveAs } from 'file-saver';
 import { connect } from 'react-redux';
 import MapLoadingProgress from './MapLoadingProgress';
 import { downloadGeojsonFile } from '../actions/controlAction';
+import { selectedFeature } from '../actions/featureActions';
+import { validateTile } from './../utils/validate';
 import config from './../config.json';
 class Map extends Component {
   constructor (props) {
@@ -67,11 +69,54 @@ class Map extends Component {
     if (nextProps.data && nextProps.currentlabel) {
       this.initLabels(nextProps.data, nextProps.currentlabel, nextProps.opacity);
     }
+    if (nextProps.feature) {
+      this.updateFeature(nextProps.feature);
+      this.activeStyle(nextProps.feature);
+    }
 
     // Download geojso file
     if (nextProps.downloadFile) {
       this.save();
       this.props.dispatch(downloadGeojsonFile(false));
+    }
+  }
+
+  updateFeature (feature) {
+    const data = this.props.data;
+    data.features = this.props.data.features.map(f => {
+      if (f.properties.index === feature.properties.index) {
+        f.properties = Object.assign({}, feature.properties);
+      }
+      return f;
+    });
+    this.map.getSource('labels').setData(data);
+  }
+
+  activeStyle (feature) {
+    if (!this.map.getSource('activeFeature')) {
+      this.map.addSource('activeFeature', {
+        type: 'geojson',
+        data: {
+          type: 'FeatureCollection',
+          features: [feature]
+        }
+      });
+      const activeFeatureLayer = {
+        id: 'activeFeature',
+        source: 'activeFeature',
+        type: 'line',
+        paint: {
+          'line-width': 4,
+          'line-color': '#ffff00',
+          'line-opacity': 0.8
+        }
+      };
+      this.map.addLayer(activeFeatureLayer);
+    } else {
+      this.map.getSource('activeFeature').setData({
+        type: 'FeatureCollection',
+        features: [feature]
+      });
     }
   }
 
@@ -84,6 +129,8 @@ class Map extends Component {
       if (f.properties.index === feature.properties.index) {
         f.properties.label[clase.id] = f.properties.label[clase.id] ? 0 : 1;
         f.properties.status = !f.properties.status || f.properties.status === 'no' ? 'yes' : 'no';
+        f = validateTile(f);
+        this.props.dispatch(selectedFeature(f));
       }
       return f;
     });
@@ -135,22 +182,35 @@ class Map extends Component {
         }
       };
 
-      const lineLayer = {
-        id: 'labels-line',
+      const reviewLayer = {
+        id: 'reviewLayer',
         source: 'labels',
         type: 'line',
         paint: {
-          'line-width': ['match', ['get', 'status'], 'no', 8, 'yes', 8, 1],
-          'line-color': ['match', ['get', 'status'], 'no', '#dc00ff', 'yes', '#dc00ff', 'white'],
+          'line-width': ['match', ['get', 'status'], 'no', 3, 'yes', 3, 1],
+          'line-color': ['match', ['get', 'status'], 'no', '#30ff07', 'yes', '#30ff07', 'white'],
+          'line-gap-width': ['match', ['get', 'status'], 'no', 2, 'yes', 2, 0],
           'line-opacity': opacity / 100
         }
       };
 
+      const conflictLayer = {
+        id: 'conflictLayer',
+        source: 'labels',
+        type: 'line',
+        paint: {
+          'line-width': ['match', ['get', 'conflict'], 'yes', 2, 0],
+          'line-color': ['match', ['get', 'conflict'], 'yes', '#ff0000', 'no', 'white', 'white'],
+          'line-dasharray': [10, 10],
+          'line-opacity': opacity / 100
+        }
+      };
       /**
        * Set label
        */
       data.features = data.features.map((f, i) => {
         f.properties.index = i;
+        f = validateTile(f);
         return f;
       });
       this.map.addSource('labels', {
@@ -161,11 +221,13 @@ class Map extends Component {
       // zoom to the data
       this.map.fitBounds([[box[0], box[1]], [box[2], box[3]]]);
       this.map.addLayer(paintLayer);
-      this.map.addLayer(lineLayer);
+      this.map.addLayer(reviewLayer);
+      this.map.addLayer(conflictLayer);
     } else {
       this.map.setPaintProperty('labels', 'fill-color', fillColors);
       this.map.setPaintProperty('labels', 'fill-opacity', opacity / 100);
-      this.map.setPaintProperty('labels-line', 'line-opacity', opacity / 100);
+      this.map.setPaintProperty('reviewLayer', 'line-opacity', opacity / 100);
+      this.map.setPaintProperty('conflictLayer', 'line-opacity', opacity / 100);
       // show and hide layers
       config.classes.forEach((c, i) => {
         const layerName = c.name;
@@ -204,6 +266,7 @@ class Map extends Component {
 Map.propTypes = {
   data: PropTypes.object,
   currentlabel: PropTypes.object,
+  feature: PropTypes.object,
   opacity: PropTypes.number,
   downloadFile: PropTypes.bool,
   dispatch: PropTypes.func
@@ -216,7 +279,8 @@ const mapStateToProps = state => ({
   labels: state.geojsonData.labels,
   currentlabel: state.geojsonData.label,
   opacity: state.control.opacity,
-  downloadFile: state.control.downloadFile
+  downloadFile: state.control.downloadFile,
+  feature: state.tile.feature
 });
 
 export default connect(mapStateToProps)(Map);
