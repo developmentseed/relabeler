@@ -9,6 +9,7 @@ import { downloadGeojsonFile } from '../actions/controlAction';
 import { selectedFeature } from '../actions/featureActions';
 import { validateTile } from './../utils/validate';
 import config from './../config.json';
+import { paintLayer, reviewLayer, conflictLayer, activeFeatureLayer } from './Map.style';
 class Map extends Component {
   constructor (props) {
     super(props);
@@ -101,16 +102,6 @@ class Map extends Component {
           features: [feature]
         }
       });
-      const activeFeatureLayer = {
-        id: 'activeFeature',
-        source: 'activeFeature',
-        type: 'line',
-        paint: {
-          'line-width': 4,
-          'line-color': '#ffff00',
-          'line-opacity': 0.8
-        }
-      };
       this.map.addLayer(activeFeatureLayer);
     } else {
       this.map.getSource('activeFeature').setData({
@@ -172,39 +163,8 @@ class Map extends Component {
      * Load the layer for first time
      */
     if (!this.map.getSource('labels')) {
-      const paintLayer = {
-        id: 'labels',
-        source: 'labels',
-        type: 'fill',
-        paint: {
-          'fill-color': fillColors,
-          'fill-opacity': opacity / 100
-        }
-      };
+      paintLayer.paint['fill-color'] = fillColors;
 
-      const reviewLayer = {
-        id: 'reviewLayer',
-        source: 'labels',
-        type: 'line',
-        paint: {
-          'line-width': ['match', ['get', 'status'], 'no', 3, 'yes', 3, 1],
-          'line-color': ['match', ['get', 'status'], 'no', '#30ff07', 'yes', '#30ff07', 'white'],
-          'line-gap-width': ['match', ['get', 'status'], 'no', 2, 'yes', 2, 0],
-          'line-opacity': opacity / 100
-        }
-      };
-
-      const conflictLayer = {
-        id: 'conflictLayer',
-        source: 'labels',
-        type: 'line',
-        paint: {
-          'line-width': ['match', ['get', 'conflict'], 'yes', 2, 0],
-          'line-color': ['match', ['get', 'conflict'], 'yes', '#ff0000', 'no', 'white', 'white'],
-          'line-dasharray': [10, 10],
-          'line-opacity': opacity / 100
-        }
-      };
       /**
        * Set label
        */
