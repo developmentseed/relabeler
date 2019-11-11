@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.js": "/relabeler/static/js/main.a375d20b.chunk.js",
-    "main.js.map": "/relabeler/static/js/main.a375d20b.chunk.js.map",
+    "main.js": "/relabeler/static/js/main.e2da18ff.chunk.js",
+    "main.js.map": "/relabeler/static/js/main.e2da18ff.chunk.js.map",
     "runtime~main.js": "/relabeler/static/js/runtime~main.6de8c315.js",
     "runtime~main.js.map": "/relabeler/static/js/runtime~main.6de8c315.js.map",
     "static/css/2.18171703.chunk.css": "/relabeler/static/css/2.18171703.chunk.css",
     "static/js/2.13243005.chunk.js": "/relabeler/static/js/2.13243005.chunk.js",
     "static/js/2.13243005.chunk.js.map": "/relabeler/static/js/2.13243005.chunk.js.map",
     "index.html": "/relabeler/index.html",
-    "precache-manifest.a25cdeb97e8eb6cc92b006d163bf78ae.js": "/relabeler/precache-manifest.a25cdeb97e8eb6cc92b006d163bf78ae.js",
+    "precache-manifest.7750274c47b41f77be32fdbd2f93e6ad.js": "/relabeler/precache-manifest.7750274c47b41f77be32fdbd2f93e6ad.js",
     "service-worker.js": "/relabeler/service-worker.js",
     "static/css/2.18171703.chunk.css.map": "/relabeler/static/css/2.18171703.chunk.css.map",
     "static/media/index.css": "/relabeler/static/media/roboto-latin-900italic.ebf6d164.woff2"
