@@ -45,7 +45,9 @@ class Map extends Component {
       style: styleTMS,
       center: [0, 0],
       zoom: 0,
-      attributionControl: true
+      attributionControl: true,
+      hash: true,
+      maxZoom: 18
     };
     this.hoverId = 0;
     const map = new mapboxgl.Map(mapConfig);
