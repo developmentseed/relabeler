@@ -11,7 +11,7 @@ import { validateTile } from './../utils/validate';
 import config from './../config.json';
 import { paintLayer, reviewLayer, conflictLayer, activeFeatureLayer } from './Map.style';
 class Map extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = { loading: true };
     this.onLabelClick = this.onLabelClick.bind(this);
@@ -20,7 +20,7 @@ class Map extends Component {
     this.toogleLayer = this.toogleLayer.bind(this);
   }
 
-  componentDidMount() {
+  componentDidMount () {
     // mapboxgl.accessToken = config.accessToken;
     const styleTMS = {
       version: 8,
@@ -69,7 +69,7 @@ class Map extends Component {
     this.map = map;
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps) {
     if (nextProps.data && nextProps.currentlabel) {
       this.initLabels(nextProps.data, nextProps.currentlabel, nextProps.opacity);
     }
@@ -77,10 +77,15 @@ class Map extends Component {
       this.updateFeature(nextProps.feature);
       this.activeStyle(nextProps.feature);
     }
+    // Download geojso file
+    if (nextProps.downloadFile) {
+      this.save();
+      this.props.dispatch(downloadGeojsonFile(false));
+    }
     this.toogleLayer(nextProps.revLayer, nextProps.valLayer);
   }
 
-  toogleLayer(revLayer, valLayer) {
+  toogleLayer (revLayer, valLayer) {
     if (this.map.getLayer('conflictLayer')) {
       valLayer ? this.map.setLayoutProperty('conflictLayer', 'visibility', 'visible') : this.map.setLayoutProperty('conflictLayer', 'visibility', 'none');
     }
@@ -96,7 +101,7 @@ class Map extends Component {
     }
   }
 
-  updateFeature(feature) {
+  updateFeature (feature) {
     const data = this.props.data;
     data.features = this.props.data.features.map(f => {
       if (f.properties.index === feature.properties.index) {
@@ -107,7 +112,7 @@ class Map extends Component {
     this.map.getSource('labels').setData(data);
   }
 
-  activeStyle(feature) {
+  activeStyle (feature) {
     if (!this.map.getSource('activeFeature')) {
       this.map.addSource('activeFeature', {
         type: 'geojson',
@@ -125,7 +130,7 @@ class Map extends Component {
     }
   }
 
-  onLabelClick(event) {
+  onLabelClick (event) {
     // shift the label by one
     const feature = event.features[0];
     const clase = this.props.currentlabel;
@@ -142,13 +147,13 @@ class Map extends Component {
     this.map.getSource('labels').setData(data);
   }
 
-  save() {
+  save () {
     const data = this.map.getSource('labels')._data;
     const blob = new Blob([JSON.stringify(data)], { type: 'application/json;charset=utf-8' });
     saveAs(blob, 'labels.geojson');
   }
 
-  loadExtraStyles() {
+  loadExtraStyles () {
     config.classes.forEach(c => {
       if (c.layers.length > 0) {
         this.map.addLayer({
@@ -166,7 +171,7 @@ class Map extends Component {
     });
   }
 
-  initLabels(data, currentlabel, opacity) {
+  initLabels (data, currentlabel, opacity) {
     const filters = [
       ['==', ['number', ['at', currentlabel.id, ['array', ['get', 'label']]]], 1],
       currentlabel.color
@@ -215,7 +220,7 @@ class Map extends Component {
     }
   }
 
-  render() {
+  render () {
     const { loading } = this.state;
     const style = {
       position: 'absolute',

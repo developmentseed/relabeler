@@ -7,7 +7,7 @@ const initialState = {
   valLayer: true
 };
 
-export default function dataReducer(state = initialState, action) {
+export default function dataReducer (state = initialState, action) {
   switch (action.type) {
     case CHANGE_OPACITY:
       return {

@@ -8,9 +8,13 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
-import { changeOpacity, revisionLayer, validationLayer } from './../actions/controlAction';
+import {
+  changeOpacity,
+  revisionLayer,
+  validationLayer
+} from './../actions/controlAction';
 
-function ValueLabelComponent(props) {
+function ValueLabelComponent (props) {
   const { children, open, value } = props;
   const popperRef = React.useRef(null);
   React.useEffect(() => {
@@ -41,31 +45,35 @@ ValueLabelComponent.propTypes = {
 };
 
 class SliderComponent extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.changeOpacityControl = this.changeOpacityControl.bind(this);
     this.toogleRevLayer = this.toogleRevLayer.bind(this);
     this.toogleValLayer = this.toogleValLayer.bind(this);
-
   }
 
-  changeOpacityControl(event, value) {
+  changeOpacityControl (event, value) {
     this.props.dispatch(changeOpacity(value));
   }
 
-  toogleRevLayer( value) {
+  toogleRevLayer (value) {
     this.props.dispatch(revisionLayer(!value));
   }
 
-  toogleValLayer( value) {
+  toogleValLayer (value) {
     this.props.dispatch(validationLayer(!value));
   }
 
-  render() {
+  render () {
     const { opacity, revLayer, valLayer } = this.props;
     return (
       <div style={{ width: '210px', margin: '1px' }}>
-        <Typography variant='caption' display='block' gutterBottom style={{ marginLeft: '5px' }}>
+        <Typography
+          variant='caption'
+          display='block'
+          gutterBottom
+          style={{ marginLeft: '5px' }}
+        >
           Label opacity
         </Typography>
         <Paper style={{ padding: '3px' }}>
@@ -83,9 +91,10 @@ class SliderComponent extends Component {
             <Checkbox
               style={{ paddingBottom: '1px', paddingTop: '1px' }}
               checked={revLayer}
-              onChange={() => { this.toogleRevLayer(revLayer) }}
-              value="checkedB"
-              color="primary"
+              onChange={() => {
+                this.toogleRevLayer(revLayer);
+              }}
+              color='primary'
             />
           }
           label={
@@ -99,9 +108,10 @@ class SliderComponent extends Component {
             <Checkbox
               style={{ paddingBottom: '1px', paddingTop: '1px' }}
               checked={valLayer}
-              onChange={() => { this.toogleValLayer(valLayer) }}
-              value="checkedB"
-              color="primary"
+              onChange={() => {
+                this.toogleValLayer(valLayer);
+              }}
+              color='primary'
             />
           }
           label={
