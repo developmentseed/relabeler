@@ -11,15 +11,16 @@ import { validateTile } from './../utils/validate';
 import config from './../config.json';
 import { paintLayer, reviewLayer, conflictLayer, activeFeatureLayer } from './Map.style';
 class Map extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
     this.state = { loading: true };
     this.onLabelClick = this.onLabelClick.bind(this);
     this.save = this.save.bind(this);
     this.loadExtraStyles = this.loadExtraStyles.bind(this);
+    this.toogleLayer = this.toogleLayer.bind(this);
   }
 
-  componentDidMount () {
+  componentDidMount() {
     // mapboxgl.accessToken = config.accessToken;
     const styleTMS = {
       version: 8,
@@ -68,7 +69,7 @@ class Map extends Component {
     this.map = map;
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) {
     if (nextProps.data && nextProps.currentlabel) {
       this.initLabels(nextProps.data, nextProps.currentlabel, nextProps.opacity);
     }
@@ -76,15 +77,26 @@ class Map extends Component {
       this.updateFeature(nextProps.feature);
       this.activeStyle(nextProps.feature);
     }
+    this.toogleLayer(nextProps.revLayer, nextProps.valLayer);
+  }
 
-    // Download geojso file
-    if (nextProps.downloadFile) {
-      this.save();
-      this.props.dispatch(downloadGeojsonFile(false));
+  toogleLayer(revLayer, valLayer) {
+    if (this.map.getLayer('conflictLayer')) {
+      valLayer ? this.map.setLayoutProperty('conflictLayer', 'visibility', 'visible') : this.map.setLayoutProperty('conflictLayer', 'visibility', 'none');
+    }
+    if (this.map.getLayer('reviewLayer')) {
+      revLayer ? this.map.setLayoutProperty('reviewLayer', 'visibility', 'visible') : this.map.setLayoutProperty('reviewLayer', 'visibility', 'none');
+      // if (revLayer) {
+      //   this.map.setLayoutProperty('reviewLayer', 'line-color', ['match', ['get', 'status'], 'no', '#30ff07', 'yes', '#30ff07', 'white']);
+      //   this.map.setLayoutProperty('reviewLayer', 'line-gap-width', ['match', ['get', 'status'], 'no', 6, 'yes', 6, 0]);
+      // } else {
+      //   this.map.setLayoutProperty('reviewLayer', 'line-color', 'white');
+      //   this.map.setLayoutProperty('reviewLayer', 'line-gap-width', '0');
+      // }
     }
   }
 
-  updateFeature (feature) {
+  updateFeature(feature) {
     const data = this.props.data;
     data.features = this.props.data.features.map(f => {
       if (f.properties.index === feature.properties.index) {
@@ -95,7 +107,7 @@ class Map extends Component {
     this.map.getSource('labels').setData(data);
   }
 
-  activeStyle (feature) {
+  activeStyle(feature) {
     if (!this.map.getSource('activeFeature')) {
       this.map.addSource('activeFeature', {
         type: 'geojson',
@@ -113,7 +125,7 @@ class Map extends Component {
     }
   }
 
-  onLabelClick (event) {
+  onLabelClick(event) {
     // shift the label by one
     const feature = event.features[0];
     const clase = this.props.currentlabel;
@@ -130,13 +142,13 @@ class Map extends Component {
     this.map.getSource('labels').setData(data);
   }
 
-  save () {
+  save() {
     const data = this.map.getSource('labels')._data;
     const blob = new Blob([JSON.stringify(data)], { type: 'application/json;charset=utf-8' });
     saveAs(blob, 'labels.geojson');
   }
 
-  loadExtraStyles () {
+  loadExtraStyles() {
     config.classes.forEach(c => {
       if (c.layers.length > 0) {
         this.map.addLayer({
@@ -154,7 +166,7 @@ class Map extends Component {
     });
   }
 
-  initLabels (data, currentlabel, opacity) {
+  initLabels(data, currentlabel, opacity) {
     const filters = [
       ['==', ['number', ['at', currentlabel.id, ['array', ['get', 'label']]]], 1],
       currentlabel.color
@@ -203,7 +215,7 @@ class Map extends Component {
     }
   }
 
-  render () {
+  render() {
     const { loading } = this.state;
     const style = {
       position: 'absolute',
@@ -231,7 +243,9 @@ Map.propTypes = {
   feature: PropTypes.object,
   opacity: PropTypes.number,
   downloadFile: PropTypes.bool,
-  dispatch: PropTypes.func
+  dispatch: PropTypes.func,
+  revLayer: PropTypes.bool,
+  valLayer: PropTypes.bool
 };
 
 const mapStateToProps = state => ({
@@ -242,7 +256,9 @@ const mapStateToProps = state => ({
   currentlabel: state.geojsonData.label,
   opacity: state.control.opacity,
   downloadFile: state.control.downloadFile,
-  feature: state.tile.feature
+  feature: state.tile.feature,
+  revLayer: state.control.revLayer,
+  valLayer: state.control.valLayer
 });
 
 export default connect(mapStateToProps)(Map);
