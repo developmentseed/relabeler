@@ -71,6 +71,20 @@ const styles = theme => ({
     border: 'none',
     textAlign: 'center',
     width: '180px'
+  },
+  nameFile: {
+    marginLeft: '1.5rem',
+    marginRight: '1.5rem'
+  },
+  labelError: {
+    position: 'absolute',
+    right: '210px',
+    textTransform: 'uppercase',
+    textDecoration: 'none',
+    display: 'inline-block',
+    border: 'none',
+    textAlign: 'center',
+    color: '#ff0400'
   }
 });
 

@@ -20,7 +20,7 @@ class Header extends Component {
   }
 
   render () {
-    const { classes, open, handleDrawerOpen } = this.props;
+    const { classes, open, handleDrawerOpen, fileName, errorLabel } = this.props;
     return (
       <AppBar
         position='fixed'
@@ -42,6 +42,12 @@ class Header extends Component {
           <Typography variant='h6' noWrap>
             Relabeler
           </Typography>
+          <Typography variant='subtitle2' className={classes.nameFile}>
+            { fileName }
+          </Typography>
+          <Typography variant='subtitle2' className={classes.labelError}>
+            { errorLabel }
+          </Typography>
           <Button className={classes.button} color='inherit' onClick={this.downloadFile}>Download</Button>
         </Toolbar>
       </AppBar>
@@ -53,12 +59,18 @@ Header.propTypes = {
   classes: PropTypes.object,
   open: PropTypes.bool,
   handleDrawerOpen: PropTypes.func,
-  dispatch: PropTypes.func
+  dispatch: PropTypes.func,
+  fileName: PropTypes.string,
+  errorLabel: PropTypes.string
+
 };
 
 const mapStateToProps = state => ({
   labels: state.geojsonData.labels,
-  currentlabel: state.geojsonData.label
+  currentlabel: state.geojsonData.label,
+  fileName: state.geojsonData.fileName,
+  errorLabel: state.geojsonData.errorLabel
+
 });
 
 export default compose(

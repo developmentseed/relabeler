@@ -3,14 +3,18 @@ import {
   FETCH_DATA_SUCCESS,
   FETCH_DATA_FAILURE,
   SET_LABEL,
-  UPDATE_DATA
+  UPDATE_DATA,
+  SET_FILE_NAME,
+  SET_ERROR_LABEL
 } from '../actions/dataActions';
 
 const initialState = {
   data: {},
   loading: true,
   error: null,
-  labels: []
+  labels: [],
+  fileName: '',
+  errorLabel: ''
 };
 
 export default function dataReducer (state = initialState, action) {
@@ -45,6 +49,16 @@ export default function dataReducer (state = initialState, action) {
       return {
         ...state,
         data: action.payload.fData
+      };
+    case SET_FILE_NAME:
+      return {
+        ...state,
+        fileName: action.payload.fileName
+      };
+    case SET_ERROR_LABEL:
+      return {
+        ...state,
+        errorLabel: action.payload.errorLabel
       };
     default:
       return state;

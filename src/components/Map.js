@@ -151,7 +151,7 @@ class Map extends Component {
     if (this.map.getSource('labels')) {
       const data = this.map.getSource('labels')._data;
       const blob = new Blob([JSON.stringify(data)], { type: 'application/json;charset=utf-8' });
-      saveAs(blob, 'labels.geojson');
+      saveAs(blob, this.props.fileName);
     }
   }
 
@@ -252,7 +252,8 @@ Map.propTypes = {
   downloadFile: PropTypes.bool,
   dispatch: PropTypes.func,
   revLayer: PropTypes.bool,
-  valLayer: PropTypes.bool
+  valLayer: PropTypes.bool,
+  fileName: PropTypes.string
 };
 
 const mapStateToProps = state => ({
