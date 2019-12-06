@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { withStyles } from '@material-ui/styles';
 import { AppBar, Button, Toolbar, IconButton, Typography } from '@material-ui/core';
-import MenuIcon from '@material-ui/icons/Menu';
+import { Menu, Error } from '@material-ui/icons';
 import styles from '../style/HomeStyles';
 import { downloadGeojsonFile } from '../actions/controlAction';
 
@@ -20,7 +20,7 @@ class Header extends Component {
   }
 
   render () {
-    const { classes, open, handleDrawerOpen, fileName, errorLabel } = this.props;
+    const { classes, open, handleDrawerOpen, fileName, confictLabel } = this.props;
     return (
       <AppBar
         position='fixed'
@@ -37,7 +37,7 @@ class Header extends Component {
             edge='start'
             className={clsx(classes.menuButton, open && classes.hide)}
           >
-            <MenuIcon />
+            <Menu />
           </IconButton>
           <Typography variant='h6' noWrap>
             Relabeler
@@ -45,8 +45,8 @@ class Header extends Component {
           <Typography variant='subtitle2' className={classes.nameFile}>
             { fileName }
           </Typography>
-          <Typography variant='subtitle2' className={classes.labelError}>
-            { errorLabel }
+          <Typography variant='h6' className={classes.confictLabel}>
+            { confictLabel }
           </Typography>
           <Button className={classes.button} color='inherit' onClick={this.downloadFile}>Download</Button>
         </Toolbar>
@@ -61,7 +61,7 @@ Header.propTypes = {
   handleDrawerOpen: PropTypes.func,
   dispatch: PropTypes.func,
   fileName: PropTypes.string,
-  errorLabel: PropTypes.string
+  confictLabel: PropTypes.string
 
 };
 
@@ -69,7 +69,7 @@ const mapStateToProps = state => ({
   labels: state.geojsonData.labels,
   currentlabel: state.geojsonData.label,
   fileName: state.geojsonData.fileName,
-  errorLabel: state.geojsonData.errorLabel
+  confictLabel: state.geojsonData.confictLabel
 
 });
 

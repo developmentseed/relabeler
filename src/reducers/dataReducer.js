@@ -5,7 +5,7 @@ import {
   SET_LABEL,
   UPDATE_DATA,
   SET_FILE_NAME,
-  SET_ERROR_LABEL
+  SET_CONFLICT_LABEL
 } from '../actions/dataActions';
 
 const initialState = {
@@ -14,7 +14,7 @@ const initialState = {
   error: null,
   labels: [],
   fileName: '',
-  errorLabel: ''
+  confictLabel: ''
 };
 
 export default function dataReducer (state = initialState, action) {
@@ -55,10 +55,10 @@ export default function dataReducer (state = initialState, action) {
         ...state,
         fileName: action.payload.fileName
       };
-    case SET_ERROR_LABEL:
+    case SET_CONFLICT_LABEL:
       return {
         ...state,
-        errorLabel: action.payload.errorLabel
+        confictLabel: action.payload.confictLabel
       };
     default:
       return state;

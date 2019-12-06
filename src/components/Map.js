@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import MapLoadingProgress from './MapLoadingProgress';
 import { downloadGeojsonFile } from '../actions/controlAction';
 import { selectedFeature } from '../actions/featureActions';
+import { setErrorLabelValidate } from '../actions/dataActions';
 import { validateTile } from './../utils/validate';
 import config from './../config.json';
 import { paintLayer, reviewLayer, conflictLayer, activeFeatureLayer } from './Map.style';
@@ -103,13 +104,19 @@ class Map extends Component {
 
   updateFeature (feature) {
     const data = this.props.data;
+    let confictLabel = 0;
     data.features = this.props.data.features.map(f => {
       if (f.properties.index === feature.properties.index) {
         f.properties = Object.assign({}, feature.properties);
       }
+      if (f.properties.conflict === 'yes') {
+        confictLabel++;
+      }
+
       return f;
     });
     this.map.getSource('labels').setData(data);
+    this.props.dispatch(setErrorLabelValidate(confictLabel));
   }
 
   activeStyle (feature) {

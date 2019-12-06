@@ -7,7 +7,7 @@ export const FETCH_DATA_FAILURE = 'FETCH_DATA_FAILURE';
 export const SET_LABEL = 'SET_LABEL';
 export const UPDATE_DATA = 'UPDATE_DATA';
 export const SET_FILE_NAME = 'SET_FILE_NAME';
-export const SET_ERROR_LABEL = 'SET_ERROR_LABEL';
+export const SET_CONFLICT_LABEL = 'SET_CONFLICT_LABEL';
 
 export const fetchDataBegin = () => ({
   type: FETCH_DATA_BEGIN
@@ -33,9 +33,9 @@ export const setFileName = fileName => ({
   type: SET_FILE_NAME,
   payload: { fileName }
 });
-export const setErrorLabel = errorLabel => ({
-  type: SET_ERROR_LABEL,
-  payload: { errorLabel }
+export const setErrorLabel = confictLabel => ({
+  type: SET_CONFLICT_LABEL,
+  payload: { confictLabel }
 });
 export const updateData = fData => {
   return {
@@ -94,4 +94,14 @@ function handleErrors (response) {
     throw Error(response.statusText);
   }
   return response;
+}
+
+export function setErrorLabelValidate (confictLabel) {
+  return dispatch => {
+    if (confictLabel === '' || confictLabel === 0) {
+      dispatch(setErrorLabel(''));
+    } else {
+      dispatch(setErrorLabel(String(confictLabel)));
+    }
+  };
 }

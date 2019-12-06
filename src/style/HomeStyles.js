@@ -76,7 +76,7 @@ const styles = theme => ({
     marginLeft: '1.5rem',
     marginRight: '1.5rem'
   },
-  labelError: {
+  confictLabel: {
     position: 'absolute',
     right: '210px',
     textTransform: 'uppercase',
@@ -84,7 +84,7 @@ const styles = theme => ({
     display: 'inline-block',
     border: 'none',
     textAlign: 'center',
-    color: '#ff0400'
+    color: '#000000'
   }
 });
 
