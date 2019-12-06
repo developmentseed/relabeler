@@ -148,9 +148,11 @@ class Map extends Component {
   }
 
   save () {
-    const data = this.map.getSource('labels')._data;
-    const blob = new Blob([JSON.stringify(data)], { type: 'application/json;charset=utf-8' });
-    saveAs(blob, 'labels.geojson');
+    if (this.map.getSource('labels')) {
+      const data = this.map.getSource('labels')._data;
+      const blob = new Blob([JSON.stringify(data)], { type: 'application/json;charset=utf-8' });
+      saveAs(blob, 'labels.geojson');
+    }
   }
 
   loadExtraStyles () {
@@ -263,7 +265,8 @@ const mapStateToProps = state => ({
   downloadFile: state.control.downloadFile,
   feature: state.tile.feature,
   revLayer: state.control.revLayer,
-  valLayer: state.control.valLayer
+  valLayer: state.control.valLayer,
+  fileName: state.geojsonData.fileName
 });
 
 export default connect(mapStateToProps)(Map);
