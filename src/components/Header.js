@@ -45,8 +45,8 @@ class Header extends Component {
           <Typography variant='subtitle2' className={classes.nameFile}>
             { fileName }
           </Typography>
-          <Typography variant='h6' className={classes.confictLabel}>
-            { confictLabel }
+          <Typography variant='subtitle1' className={classes.confictLabel}>
+            {confictLabel > 0 ? `Reviewed tiles: ${confictLabel}` : ''}
           </Typography>
           <Button className={classes.button} color='inherit' onClick={this.downloadFile}>Download</Button>
         </Toolbar>

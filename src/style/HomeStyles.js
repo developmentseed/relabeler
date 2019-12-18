@@ -78,13 +78,7 @@ const styles = theme => ({
   },
   confictLabel: {
     position: 'absolute',
-    right: '210px',
-    textTransform: 'uppercase',
-    textDecoration: 'none',
-    display: 'inline-block',
-    border: 'none',
-    textAlign: 'center',
-    color: '#000000'
+    right: '210px'
   }
 });
 
