@@ -1,4 +1,5 @@
 ## Relabeler
+
 - Loads `classification.geojson` from Label Maker
 - Shows labels over satellite imagery
 - Allows GUI relabeling (save and convert back to `.npz`)
@@ -6,8 +7,24 @@
 
 ![showing relabeler in use](relabeler.gif)
 
-### Use
+## Development
+
+- Start the app locally
+
+```
+yarn install
+yarn start
+```
+
+- Build the app
+
+```
+yarn build
+```
+
+
+<!-- ### Use
 - Put `labels.geojson` file in this root folder
 - Serve via `python -m http.server`
 - Saves the output as a randomly named txt file (but it's actually GeoJSON)
-- Convert to `.npz` with `python to-npz.py`
+- Convert to `.npz` with `python to-npz.py` -->
