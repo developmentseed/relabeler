@@ -71,6 +71,14 @@ const styles = theme => ({
     border: 'none',
     textAlign: 'center',
     width: '180px'
+  },
+  nameFile: {
+    marginLeft: '1.5rem',
+    marginRight: '1.5rem'
+  },
+  confictLabel: {
+    position: 'absolute',
+    right: '210px'
   }
 });
 

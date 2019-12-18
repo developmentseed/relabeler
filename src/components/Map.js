@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import MapLoadingProgress from './MapLoadingProgress';
 import { downloadGeojsonFile } from '../actions/controlAction';
 import { selectedFeature } from '../actions/featureActions';
+import { setErrorLabelValidate } from '../actions/dataActions';
 import { validateTile } from './../utils/validate';
 import config from './../config.json';
 import { paintLayer, reviewLayer, conflictLayer, activeFeatureLayer } from './Map.style';
@@ -103,13 +104,19 @@ class Map extends Component {
 
   updateFeature (feature) {
     const data = this.props.data;
+    let confictLabel = 0;
     data.features = this.props.data.features.map(f => {
       if (f.properties.index === feature.properties.index) {
         f.properties = Object.assign({}, feature.properties);
       }
+      if (f.properties.conflict === 'yes') {
+        confictLabel++;
+      }
+
       return f;
     });
     this.map.getSource('labels').setData(data);
+    this.props.dispatch(setErrorLabelValidate(confictLabel));
   }
 
   activeStyle (feature) {
@@ -148,9 +155,11 @@ class Map extends Component {
   }
 
   save () {
-    const data = this.map.getSource('labels')._data;
-    const blob = new Blob([JSON.stringify(data)], { type: 'application/json;charset=utf-8' });
-    saveAs(blob, 'labels.geojson');
+    if (this.map.getSource('labels')) {
+      const data = this.map.getSource('labels')._data;
+      const blob = new Blob([JSON.stringify(data)], { type: 'application/json;charset=utf-8' });
+      saveAs(blob, this.props.fileName);
+    }
   }
 
   loadExtraStyles () {
@@ -250,7 +259,8 @@ Map.propTypes = {
   downloadFile: PropTypes.bool,
   dispatch: PropTypes.func,
   revLayer: PropTypes.bool,
-  valLayer: PropTypes.bool
+  valLayer: PropTypes.bool,
+  fileName: PropTypes.string
 };
 
 const mapStateToProps = state => ({
@@ -263,7 +273,8 @@ const mapStateToProps = state => ({
   downloadFile: state.control.downloadFile,
   feature: state.tile.feature,
   revLayer: state.control.revLayer,
-  valLayer: state.control.valLayer
+  valLayer: state.control.valLayer,
+  fileName: state.geojsonData.fileName
 });
 
 export default connect(mapStateToProps)(Map);
