@@ -19,3 +19,10 @@ python to-npz.py <path to>/classification.geojson <path to>/labels.npz
 ```
 node set-tileId.js <path to>/classification.geojson > <path to>/classification-fixed.geojson 
 ```
+
+
+## Converting labels.npz to object-detection.geojson
+
+```
+python od-to-geo.py <path to>/labels.npz <path to>/object-detection.geojson
+```
