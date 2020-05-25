@@ -1,6 +1,6 @@
 {
     "layers": [
-        "https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.jpg?access_token=pk.eyJ1IjoiZGV2c2VlZCIsImEiOiJnUi1mbkVvIn0.018aLhX0Mb0tdtaT2QNe2Q"
+        "https://evwhs.digitalglobe.com/earthservice/wmtsaccess?CONNECTID=c4c0f9e5-c5c7-4fee-aea5-57a10dd1e6ad&request=GetTile&version=1.0.0&layer=DigitalGlobe:ImageryTileService&featureProfile=Global_Currency_Profile&style=default&format=image/png&TileMatrixSet=EPSG:3857&TileMatrix=EPSG:3857:{z}&TileRow={y}&TileCol={x}"
     ],
     "classes": [
         {
