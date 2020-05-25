@@ -10,13 +10,13 @@
         {
             "name": "school",
             "layers": [
-                "https://a.tiles.mapbox.com/styles/v1/devseed/ck1kthmph0c831clkebqdv1a6/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGV2c2VlZCIsImEiOiJnUi1mbkVvIn0.018aLhX0Mb0tdtaT2QNe2Q"
+                "https://a.tiles.mapbox.com/styles/v1/devseed/ck7ge0zi50ml41imqvt99vszg/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGV2c2VlZCIsImEiOiJnUi1mbkVvIn0.018aLhX0Mb0tdtaT2QNe2Q"
             ]
         },
         {
             "name": "place_of_worship",
             "layers": [
-                "https://a.tiles.mapbox.com/styles/v1/devseed/ck1mc3rjp1j5o1cm3hbiuw81q/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGV2c2VlZCIsImEiOiJnUi1mbkVvIn0.018aLhX0Mb0tdtaT2QNe2Q"
+                "https://a.tiles.mapbox.com/styles/v1/devseed/ck7gjvmy90wk41jr2ugwk5lhh/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGV2c2VlZCIsImEiOiJnUi1mbkVvIn0.018aLhX0Mb0tdtaT2QNe2Q"
             ]
         },
         {
